@@ -8,13 +8,13 @@ views = Blueprint('views', __name__)
 
 @views.route('/home')
 def home():
-    return render_template("home.html")
+    return render_template("home.html",user = current_user)
 
 @views.route('/')#returns to the home page if no page chosen
 def homeAlso():
-    return render_template("home.html")
+    return render_template("home.html",user = current_user)
 
 @views.route('/about')
 def about():
-    return render_template("about.html")
+    return render_template("about.html",user = current_user)
 
