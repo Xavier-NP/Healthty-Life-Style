@@ -78,5 +78,10 @@ def sign_up():
             login_user(new_user, remember=True) #Allows for website to remember user is logged in the current session
             flash("Account Created!", category="success")
             return redirect(url_for("views.home"))
+            
+    return render_template("sign_up.html", user = current_user)
 
-    return render_template("sign_up.html",user=current_user)
+@auth.route('/userinfo')
+@login_required
+def userInfo():
+    return render_template("userInfo.html",user = current_user)
