@@ -49,7 +49,7 @@ def logout():
     return redirect(url_for('auth.login'))
 
 #Signup
-@auth.route('sign-up',methods=['GET','POST'])
+@auth.route('/sign-up',methods=['GET','POST'])
 def sign_up():
     if request.method =='POST':
         # Get Data from HTML
@@ -81,7 +81,7 @@ def sign_up():
             
     return render_template("sign_up.html", user = current_user)
 
-@auth.route('/userinfo')
+@auth.route('/user-info')
 @login_required
 def userInfo():
-    return render_template("userInfo.html",user = current_user)
+    return render_template("user_info.html",user = current_user)
