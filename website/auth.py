@@ -64,7 +64,7 @@ def signup():
             db.session.commit()
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
-            return redirect(url_for('auth.userinfo'))
+            return redirect(url_for('auth.userInfo'))
     return render_template("sign_up.html")
 
 @auth.route('/userinfo')
