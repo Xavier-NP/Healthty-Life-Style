@@ -33,7 +33,7 @@ def note():
 
 @views.route('/about')
 def about():
-    return render_template("about.html",user = current_user)
+    return render_template("about.html")
 
 #Delete Note
 @views.route('/delete-note',methods=['POST'])
