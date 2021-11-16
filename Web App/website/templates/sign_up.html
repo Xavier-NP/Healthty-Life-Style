@@ -4,7 +4,28 @@
 <!--Content-->
 {%block content%}
 <form method="POST">
-  <h3 align="center">Sign Up</h3>
+  <h3 align="center">HLS Sign Up</h3>
+  <!--First Name-->
+  <div class="form-group">
+    <label for="firstName">First Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="firstName"
+      name="firstName"
+      placeholder="Enter first name"
+    />
+  </div>
+  <div class="form-group">
+    <label for="lastName">Last Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="lastName"
+      name="lastName"
+      placeholder="Enter last name"
+    />
+  </div>
   <!--Email-->
   <div class="form-group">
     <label for="email">Email Address</label>
@@ -16,15 +37,26 @@
       placeholder="Enter email"
     />
   </div>
-  <!--First Name-->
+  <!--Mobile number-->
   <div class="form-group">
-    <label for="firstName">First Name</label>
+    <label for="mobileNum">Mobile Number</label>
     <input
       type="text"
       class="form-control"
-      id="firstName"
-      name="firstName"
-      placeholder="Enter first name"
+      id="mobileNum"
+      name="mobileNum"
+      placeholder="Enter 8 digit mobile number"
+    />
+  </div>
+  <!--NRIC/FIN-->
+  <div class="form-group">
+    <label for="nric">NRIC/FIN</label>
+    <input
+      type="text"
+      class="form-control"
+      id="nric"
+      name="nric"
+      placeholder="Enter NRIC/FIN"
     />
   </div>
   <!--Password-->
@@ -40,7 +72,7 @@
   </div>
   <!--Confirm Password-->
   <div class="form-group">
-    <label for="password2">Password (Confirm)</label>
+    <label for="password2">Confirm Password</label>
     <input
       type="password"
       class="form-control"
@@ -50,6 +82,6 @@
     />
   </div>
   <br />
-  <button type="submit" class="btn btn-outline-primary">Submit</button>
+  <button type="submit" class="btn btn-outline-primary">Sign Up</button>
 </form>
 {% endblock %}

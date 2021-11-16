@@ -53,8 +53,12 @@ def logout():
 def sign_up():
     if request.method =='POST':
         # Get Data from HTML
-        email= request.form.get('email')
+        
         first_name= request.form.get('firstName')
+        last_name= request.form.get('lastName')
+        email= request.form.get('email')
+        mobileNum = request.form.get('mobileNum')
+        nric = request.form.get('nric')
         password1= request.form.get('password1')
         password2= request.form.get('password2')
         
@@ -64,15 +68,21 @@ def sign_up():
             flash('Email already exists',category='error')
         elif len(email)<4: #Check if email is has more than 3 alphanumeric
             flash('Email must be greater than 3 Characters.', category='error')
-        elif len(first_name) <2: #check if name has more than 1 letters
+        elif len(first_name) <2: #check if first name has more than 1 letters
             flash('First Name must be more than 1 Character.', category='error')
+        elif len(last_name) <2: #check if last name has more than 1 letters
+            flash('Last Name must be more than 1 Character.', category='error')
+        elif len(mobileNum)!=8 or (mobileNum.isnumeric()==False):#ensure number is 8 digits, mobile number is numeric
+            flash('Enter a valid 8 digit mobile number', category = 'error')
+        elif len(nric)!=9:#ensure ic entered is 9 char
+            flash('Enter a valid NRIC/FIN')
         elif len(password1)<7: #Check if password is more than 7 alphanumeric
             flash('Password must be at least 7 Characters', category='error')
         elif password1 != password2: #Check if password and confirm password is the same
             flash('Passwords dont\'t match.', category='error')
         else:
             #Add user to DB
-            new_user = User(email=email,first_name=first_name,password=generate_password_hash(password1,method='sha256'))
+            new_user = User(first_name=first_name, last_name=last_name, email=email, mobileNum=mobileNum, nric=nric, password=generate_password_hash(password1,method='sha256'))
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True) #Allows for website to remember user is logged in the current session
