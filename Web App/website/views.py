@@ -2,7 +2,7 @@
 
 from flask import Blueprint,render_template,request,flash,jsonify
 from flask_login import  login_required, current_user
-from .models import Note
+from .models import Disability, Note
 from . import db
 import json
 
@@ -44,6 +44,35 @@ def delete_note():
     if note:
         if note.user_id == current_user.id:
             db.session.delete(note)
+            db.session.commit()
+    
+    return jsonify({})
+
+#Disability
+@views.route('/med-hist',methods = ['GET','POST'])
+@login_required
+def disability():
+    if request.method=='POST':
+        dis = request.form.get('disability')
+        
+        if len(dis) < 1:
+            flash("Enter a valid input",category ='error')
+        else:
+            new_dis = Disability(disName = dis, disUser_id = current_user.id)
+            db.session.add(new_dis)
+            db.session.commit()
+            flash('Input updated!',category='success')
+    return render_template("med_hist.html",user = current_user)
+
+#Delete disability
+@views.route('/delete-disability',methods=['POST'])
+def delete_dis():
+    dis = json.loads(request.disName)
+    disId = dis['disId']
+    dis = Disability.query.get(disId)
+    if dis:
+        if dis.disUser_id == current_user.id:
+            db.session.delete(dis)
             db.session.commit()
     
     return jsonify({})

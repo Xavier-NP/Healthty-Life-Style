@@ -96,3 +96,8 @@ def sign_up():
 @login_required
 def userInfo():
     return render_template("user_info.html",user = current_user)
+
+@auth.route('/med-hist')
+@login_required
+def medHist():
+    return render_template("med_hist.html",user = current_user)

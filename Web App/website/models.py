@@ -14,6 +14,7 @@ class User(db.Model,UserMixin):
     nric = db.Column(db.String(9))
     addr = db.Column(db.String(150))
     notes = db.relationship('Note')
+    disabilities = db.relationship('Disability')
     
 #Class Notes
 class Note(db.Model):
@@ -22,4 +23,13 @@ class Note(db.Model):
     date = db.Column(db.DateTime(timezone=True),default=func.now())
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     
-#Doctor/Caregiver, Disability
+#Doctor/Caregiver
+
+#Disability
+class Disability(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    disName = db.Column(db.String(100000))
+    disDate = db.Column(db.DateTime(timezone=True),default=func.now())
+    disUser_id = db.Column(db.Integer,db.ForeignKey('user.id'))
+
+#Medical Hist
