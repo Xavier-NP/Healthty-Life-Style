@@ -1,1 +1,45 @@
 {% extends "base.html"%}
+<!--https://www.medicalnewstoday.com/articles/319731#calculating-how-many-calories-are-burned-in-a-day-->
+{%block content%}
+<h3 align = "center">Calories</h3>
+
+<!--Get basic info-->
+<form method="POST">
+    <!--weight-->
+    <b>Enter Information</b>
+    <div class="form-group">
+    <label for="weight">Weight (KG)</label>
+    <input type="text" name ="weight" placeholder="Enter weight in KG">
+    <!--height    &nbsp is to add spacing between the text within the same line-->
+    <label for="height">&nbsp&nbsp&nbsp Height (CM)</label>
+    <input type="text" name="height" placeholder="Enter height in CM">
+    <!--Age-->
+    <label for="age">&nbsp&nbsp&nbsp Age</label>
+    <input type="int" name="age" placeholder="Enter age">
+    </div>
+    <br />
+    <hr><!--insert horizontal line in middle-->
+
+    <b>Select Gender</b><br>
+    <input type="radio" id="male" name="gender" value="male">
+    <label for="male">Male</label>
+    &nbsp&nbsp&nbsp&nbsp
+    <input type="radio" id="female" name="gender" value="female">
+    <label for="female">Female</label><br>
+    <hr>
+
+<!--Activeness            &nbsp;&nbsp;  is just to add spacing-->
+    <b>How active are you from a scale of 1 to 5</b><br>
+    <input type="radio" id="scale1" name="activeness" value="1">
+    <label for="scale1">1: Little to no exercise</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="scale2" name="activeness" value="2">
+    <label for="scale2">2: Light excercises(1-3 days a week)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="scale3" name="activeness" value="3">
+    <label for="scale3">3: Moderate(3-5 days a week)</label><br>
+    <input type="radio" id="scale4" name="activeness" value="4">
+    <label for="scale4">4: Active(6-7 days a week)</label>&nbsp;&nbsp;
+    <input type="radio" id="scale5" name="activeness" value="5">
+    <label for="scale5">5: Very active(physically demanding job/challenging excercise routine)</label><br><br>
+    <button type="submit" class="btn btn-outline-primary">Submit</button><br>
+</form> 
+{%endblock%}
