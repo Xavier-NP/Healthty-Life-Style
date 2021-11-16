@@ -12,6 +12,7 @@ class User(db.Model,UserMixin):
     last_name = db.Column(db.String(150))
     mobileNum = db.Column(db.String(8))
     nric = db.Column(db.String(9))
+    addr = db.Column(db.String(150))
     notes = db.relationship('Note')
     
 #Class Notes

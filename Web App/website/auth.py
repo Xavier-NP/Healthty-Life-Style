@@ -59,6 +59,7 @@ def sign_up():
         email= request.form.get('email')
         mobileNum = request.form.get('mobileNum')
         nric = request.form.get('nric')
+        addr = request.form.get('addr')
         password1= request.form.get('password1')
         password2= request.form.get('password2')
         
@@ -82,7 +83,7 @@ def sign_up():
             flash('Passwords dont\'t match.', category='error')
         else:
             #Add user to DB
-            new_user = User(first_name=first_name, last_name=last_name, email=email, mobileNum=mobileNum, nric=nric, password=generate_password_hash(password1,method='sha256'))
+            new_user = User(first_name=first_name, last_name=last_name, email=email, mobileNum=mobileNum, nric=nric, addr=addr, password=generate_password_hash(password1,method='sha256'))
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True) #Allows for website to remember user is logged in the current session
