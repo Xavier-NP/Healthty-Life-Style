@@ -101,3 +101,18 @@ def userInfo():
 @login_required
 def medHist():
     return render_template("med_hist.html",user = current_user)
+
+
+#Calculate BMI
+@auth.route('/bmi',methods=['GET','POST'])
+@login_required
+def calBMI():#bmi = kg/m^2
+    if request.method == 'POST' and request.form.get('weight').isnumeric() and request.form.get('height').isnumeric():
+        bm = 0
+        w = float(request.form.get('weight'))
+        h = float(request.form.get('height'))
+        bm = round((w/((h/100)**2)),2)
+
+        return render_template("bmi.html",bmi = bm,user=current_user)
+    else:
+        return render_template("bmi.html",bmi=0,user = current_user)
