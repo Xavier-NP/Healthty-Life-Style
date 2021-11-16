@@ -26,6 +26,7 @@ class User(db.Model,UserMixin):
     addr = db.Column(db.String(150))
     notes = db.relationship('Note')
     disabilities = db.relationship('Disability',secondary=ailments,backref = db.backref("ailments", lazy = 'dynamic'))
+    role_id = db.Column(db.Integer,db.ForeignKey("role.id"))
     
 #Class Notes
 class Note(db.Model):
@@ -34,7 +35,11 @@ class Note(db.Model):
     date = db.Column(db.DateTime(timezone=True),default=func.now())
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     
-#Doctor/Caregiver
+#Roles
+class Role(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    roleName=db.Column(db.Integer,unique=True)
+    users = db.relationship("User")
 
 
 #Medical Hist
