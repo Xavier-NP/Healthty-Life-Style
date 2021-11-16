@@ -1,7 +1,7 @@
 #Authenticated Routes for Website i.e. sites requiring authentication
 
 from flask import Blueprint,render_template,request,flash,redirect,url_for
-from .models import User
+from .models import Disability, User
 from werkzeug.security import generate_password_hash,check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -62,6 +62,7 @@ def sign_up():
         addr = request.form.get('addr')
         password1= request.form.get('password1')
         password2= request.form.get('password2')
+        disabilities = request.form.getlist('disability')
         
         #Check for any errors and flash if there are
         user = User.query.filter_by(email=email).first()
@@ -81,9 +82,18 @@ def sign_up():
             flash('Password must be at least 7 Characters', category='error')
         elif password1 != password2: #Check if password and confirm password is the same
             flash('Passwords dont\'t match.', category='error')
+        elif not disabilities: #Check if at least 1 disability is selected
+            flash('Please select a disability!',category='error')
         else:
-            #Add user to DB
+            #Creating New user
             new_user = User(first_name=first_name, last_name=last_name, email=email, mobileNum=mobileNum, nric=nric, addr=addr, password=generate_password_hash(password1,method='sha256'))
+            
+            #Assigning disabilities to user
+            for x in range(len(disabilities)):
+                dist_name=Disability.query.filter_by(disName=disabilities[x]).first()
+                new_user.disabilities.append(dist_name)
+            
+            #Adding created user to DB
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True) #Allows for website to remember user is logged in the current session

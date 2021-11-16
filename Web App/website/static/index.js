@@ -1,3 +1,4 @@
+// Delete Note Function
 function deleteNote(noteId){
     fetch('/delete-note',{
         method: 'POST',
@@ -7,6 +8,7 @@ function deleteNote(noteId){
     });
 }
 
+// Delete Disability Function
 function deleteDis(disId){
     fetch('/delete-disability',{
         method: 'POST',

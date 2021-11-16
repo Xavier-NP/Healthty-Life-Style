@@ -1,7 +1,18 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+
 ##Defining Schemas
+
+#Class Disability
+ailments = db.Table('ailment',
+        db.Column('user_id',db.Integer,db.ForeignKey('user.id'),primary_key=True),
+        db.Column('disability_id',db.Integer,db.ForeignKey('disability.id'),primary_key=True)
+        )
+class Disability(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    disName = db.Column(db.String(100000),unique=True)
+
 
 #Class User
 class User(db.Model,UserMixin):
@@ -14,7 +25,7 @@ class User(db.Model,UserMixin):
     nric = db.Column(db.String(9))
     addr = db.Column(db.String(150))
     notes = db.relationship('Note')
-    disabilities = db.relationship('Disability')
+    disabilities = db.relationship('Disability',secondary=ailments,backref = db.backref("ailments", lazy = 'dynamic'))
     
 #Class Notes
 class Note(db.Model):
@@ -25,11 +36,5 @@ class Note(db.Model):
     
 #Doctor/Caregiver
 
-#Disability
-class Disability(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
-    disName = db.Column(db.String(100000))
-    disDate = db.Column(db.DateTime(timezone=True),default=func.now())
-    disUser_id = db.Column(db.Integer,db.ForeignKey('user.id'))
 
 #Medical Hist
