@@ -2,6 +2,7 @@
 
 from flask import Blueprint,render_template,request,flash,jsonify
 from flask_login import  login_required, current_user
+from sqlalchemy.sql.expression import null
 from .models import Disability, Note
 from . import db
 import json
@@ -76,3 +77,4 @@ def delete_dis():
             db.session.commit()
     
     return jsonify({})
+
