@@ -6,11 +6,11 @@ User Info
 
 {%block content%}
 <h1 align="center">User Information</h1>
-<h2>Name: {{ user.fullName() }}</h2>
-<h2>NRIC: {{ user.nric }}</h2><hr>
+<h5>Name: {{ user.fullName() }}</h5>
+<h5>NRIC: {{ user.nric }}</h5><hr>
 
 
-<h3>Disability</h3>
+<h5>Disability</h5>
 <ul class="list-group list-group-flush" id="disabilities">
     {% for dis in user.disabilities %}
     Added on: {{ dis.disDate  }}
@@ -31,7 +31,7 @@ User Info
 
 <hr>
 
-<h3>Family History</h3>
+<h5>Family History</h5>
 <ol>
     <li>High Cholestrol</li>
     <li>High Blood Pressure</li>
