@@ -74,12 +74,10 @@ def init_Disabilities(app):
             db.session.add(new_doctor)
             db.session.commit()
             
-            new_doctor = Patient(
-                email="Urmader",
+            new_doctor = Doctor(
+                email="Urmader@gmail.com",
                 password=generate_password_hash("Pa$$w0rd",method='sha256'),
-                first_name= "mader",
-                last_name = "die",
-                doctor_id=1
+                full_name = 'mader die'
                 )
             
             db.session.add(new_doctor)
