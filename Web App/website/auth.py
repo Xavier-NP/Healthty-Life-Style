@@ -112,9 +112,19 @@ def sign_up():
     return render_template("sign_up.html", user = current_user)
 
 #User-Info Route
-@auth.route('/user-info')
+@auth.route('/user-info',methods=['GET','POST'])
 @login_required
 def userInfo():
+    if request.method=='POST':
+        dis = request.form.get('disability')
+        
+        if len(dis) < 1:
+            flash("Enter a valid input",category ='error')
+        else:
+            new_dis = Disability(disName = dis, id=current_user.id)
+            db.session.add(new_dis)
+            db.session.commit()
+            flash('Disability Added',category='success')
     return render_template("user_info.html",user = current_user)
 
 

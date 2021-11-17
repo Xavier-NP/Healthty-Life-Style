@@ -13,6 +13,7 @@ ailments = db.Table('ailment',
 class Disability(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     disName = db.Column(db.String(100000),unique=True)
+    #dis_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     
 #Class Notes
 class Note(db.Model):
@@ -33,6 +34,7 @@ class User(db.Model,UserMixin):
     email = db.Column(db.String(150),unique=True)
     password = db.Column(db.String(150))
     notes = db.relationship('Note')
+    #disabilities = db.relationship('Disability')
     type = db.Column('type',db.String(50))
     __mapper_args__ = {'polymorphic_on':type}
 
