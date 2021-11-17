@@ -1,7 +1,7 @@
 #Authenticated Routes for Website i.e. sites requiring authentication
 
 from flask import Blueprint,render_template,request,flash,redirect,url_for
-from .models import Disability, User, Role
+from .models import Disability, Doctor,Patient, User
 from werkzeug.security import generate_password_hash,check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -65,7 +65,7 @@ def sign_up():
         disabilities = request.form.getlist('disability')
         
         #Check for any errors and flash if there are
-        user = User.query.filter_by(email=email).first()
+        user = Patient.query.filter_by(email=email).first()
         if user:
             flash('Email already exists',category='error')
         elif len(email)<4: #Check if email is has more than 3 alphanumeric
@@ -86,13 +86,13 @@ def sign_up():
             flash('Please select a disability!',category='error')
         else:
             #Creating New user
-            new_user = User(first_name=first_name,
+            new_user = Patient(first_name=first_name,
                             last_name=last_name, 
                             email=email, 
                             mobileNum=mobileNum, 
                             nric=nric, addr=addr, 
                             password=generate_password_hash(password1,method='sha256'),
-                            role_id=1 # Setting all users that login to be Patients
+                            #role_id=1 # Setting all users that login to be Patients
                             )
             
             #Assigning disabilities to user
