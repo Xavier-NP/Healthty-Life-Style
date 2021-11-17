@@ -1,5 +1,7 @@
 #Authenticated Routes for Website i.e. sites requiring authentication
 
+import re
+from types import NoneType
 from flask import Blueprint,render_template,request,flash,redirect,url_for
 from .models import Disability, User
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -113,16 +115,93 @@ def medHist():
     return render_template("med_hist.html",user = current_user)
 
 
+def getBMI(w,h):
+    bmi = round((w/((h/100)**2)),2)
+    return bmi
+    
+
+
 #Calculate BMI
 @auth.route('/bmi',methods=['GET','POST'])
 @login_required
 def calBMI():#bmi = kg/m^2
     if request.method == 'POST' and request.form.get('weight').isnumeric() and request.form.get('height').isnumeric():
-        bm = 0
         w = float(request.form.get('weight'))
         h = float(request.form.get('height'))
-        bm = round((w/((h/100)**2)),2)
+        bmi = getBMI(w,h)
 
-        return render_template("bmi.html",bmi = bm,user=current_user)
+        return render_template("bmi.html",bmi = bmi,user=current_user)
     else:
         return render_template("bmi.html",bmi=0,user = current_user)
+
+
+@auth.route('/calories',methods = ['GET','POST'])
+@login_required
+def calories():
+    if request.method == 'POST' and request.form.get('weight')!="" and request.form.get('age')!=""and request.form.get('age')!="":
+        w = float(request.form.get('weight'))
+        h = float(request.form.get('height'))
+        age = int(request.form.get('age'))
+        gender = request.form.get('gender')
+        activeness = request.form.get('activeness')
+        bmr = 0
+        calNeed = 0
+        if gender == "male":
+            bmr = 88.362 + (13.397*w)+(4.799*h)-(5.677*age)
+        elif gender == "female":
+            bmr = 447.593 + (9.247*w) + (3.098*h)-(4.330*age)
+        if(activeness == "1"):
+            calNeed = bmr*1.2
+        elif(activeness == "2"):
+            calNeed = bmr*1.37
+        elif(activeness == "3"):
+            calNeed = bmr*1.55
+        elif(activeness=="4"):
+            calNeed = bmr*1.725
+        elif(activeness=="5"):
+            calNeed = bmr*1.9
+        calNeed = round(calNeed,2)
+        bmi = getBMI(w,h)
+    else:
+        calNeed = 0
+        bmi = 0
+
+        #intake
+    if request.method=="POST" and request.form.get("breakfast")!=NoneType and request.form.get("lunch")!=NoneType and request.form.get("dinner")!=NoneType: 
+        chickenRice = 607 #https://www.healthhub.sg/live-healthy/165/healthy_cooking
+        wontonNoodle = 409 #https://www.thestar.com.my/lifestyle/viewpoints/tell-me-about/2011/02/27/malaysian-calories
+        duckRice = 673 #https://www.healthxchange.sg/food-nutrition/food-tips/best-worst-singapore-hawker-chinese-food-duck-rice-fishball-noodle
+        meal = [chickenRice,wontonNoodle,duckRice]
+
+        #Serving size in quantity
+        try:
+            bServing = int(request.form.get('bServing'))
+        except:
+            bServing = 1
+        try:
+            lServing = int(request.form.get('lServing'))
+        except:
+            lServing = 1
+        try:
+            dServing = int(request.form.get('dServing'))
+        except:
+            dServing=1
+        ##
+
+        try:
+            breakfast = int(request.form.get('breakfast'))
+            lunch = int(request.form.get('lunch'))
+            dinner = int(request.form.get('dinner'))
+            totalIntake = ((meal[breakfast]*bServing)+(meal[lunch]*lServing)+(meal[dinner]*dServing))
+        except:
+            totalIntake=0
+    else:
+        totalIntake=0
+        
+
+    return render_template("calories.html",calNeed = calNeed, totalIntake = totalIntake,bmi=bmi,user = current_user)
+
+
+
+
+            
