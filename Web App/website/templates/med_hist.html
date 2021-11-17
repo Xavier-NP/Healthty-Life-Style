@@ -1,8 +1,8 @@
 {% extends "base.html"%}
 {%block content%}
 <h1>Medical History</h1>
-<p>Name: (name...)</p>
-<p>NRIC: (numer...)</p><hr>
+<p>Name: {{ user.fullName() }}</p>
+<p>NRIC: {{ user.nric }}</p><hr>
 
 
 <h3>Disability</h3>
