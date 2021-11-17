@@ -1,7 +1,6 @@
 #Authenticated Routes for Website i.e. sites requiring authentication
 
 import re
-from types import NoneType
 from flask import Blueprint,render_template,request,flash,redirect,url_for
 from .models import Disability, Doctor,Patient, User
 from werkzeug.security import generate_password_hash,check_password_hash
@@ -11,7 +10,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 
 auth = Blueprint('auth',__name__)
-
+NoneType=type(None)
 ##Routes
 
 #Redirect
@@ -65,6 +64,7 @@ def sign_up():
         password1= request.form.get('password1')
         password2= request.form.get('password2')
         disabilities = request.form.getlist('disability')
+        doctor = request.form.get('doctor')
         
         #Check for any errors and flash if there are
         user = Patient.query.filter_by(email=email).first()
@@ -87,6 +87,8 @@ def sign_up():
         elif not disabilities: #Check if at least 1 disability is selected
             flash('Please select a disability!',category='error')
         else:
+            #Check which doctor the user selected
+            
             #Creating New user
             new_user = Patient(first_name=first_name,
                             last_name=last_name, 
@@ -94,6 +96,7 @@ def sign_up():
                             mobileNum=mobileNum, 
                             nric=nric, addr=addr, 
                             password=generate_password_hash(password1,method='sha256'),
+                            doctor_id=doctor
                             #role_id=1 # Setting all users that login to be Patients
                             )
             
@@ -101,6 +104,7 @@ def sign_up():
             for x in range(len(disabilities)):
                 dist_name=Disability.query.filter_by(disName=disabilities[x]).first()
                 new_user.disabilities.append(dist_name)
+            
             
             #Adding created user to DB
             db.session.add(new_user)
