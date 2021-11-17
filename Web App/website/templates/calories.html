@@ -1,1 +1,119 @@
 {% extends "base.html"%}
+<!--https://www.medicalnewstoday.com/articles/319731#calculating-how-many-calories-are-burned-in-a-day-->
+<!--https://www.garnethealth.org/news/basal-metabolic-rate-calculator-->
+<!--Men: BMR = 88.362 + (13.397 x weight in kg) + (4.799 x height in cm) – (5.677 x age in years)
+Women: BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) – (4.330 x age in years)-->
+{%block content%}
+<h2 align = "center">Calories</h2>
+
+<!--Get basic info-->
+<h5 align = "center" style ="color:rgb(127, 127, 218)">Calculate Calories Requirement</h5>
+<p>*Scroll to the bottom for calculation results</p>
+<form method="POST">
+    <!--weight-->
+    <b>Enter Information</b>
+    <div class="form-group">
+    <label for="weight">Weight (KG)</label>
+    <input type="text" name ="weight" placeholder="Enter weight in KG">
+    <!--height    &nbsp is to add spacing between the text within the same line-->
+    <label for="height">&nbsp&nbsp&nbsp Height (CM)</label>
+    <input type="text" name="height" placeholder="Enter height in CM">
+    <!--Age-->
+    <label for="age">&nbsp&nbsp&nbsp Age</label>
+    <input type="int" name="age" placeholder="Enter age">
+    </div>
+    <br />
+    <hr><!--insert horizontal line in middle-->
+
+    <b>Select Gender</b><br>
+    <input type="radio" id="male" name="gender" value="male">
+    <label for="male">Male</label>
+    &nbsp&nbsp&nbsp&nbsp
+    <input type="radio" id="female" name="gender" value="female">
+    <label for="female">Female</label><br>
+    <hr>
+
+<!--Activeness            &nbsp;&nbsp;  is just to add spacing-->
+    <b>How active are you from a scale of 1 to 5</b><br>
+    <input type="radio" id="scale1" name="activeness" value="1">
+    <label for="scale1">1: Little to no exercise</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="scale2" name="activeness" value="2">
+    <label for="scale2">2: Light excercises(1-3 days a week)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="scale3" name="activeness" value="3">
+    <label for="scale3">3: Moderate(3-5 days a week)</label><br>
+    <input type="radio" id="scale4" name="activeness" value="4">
+    <label for="scale4">4: Active(6-7 days a week)</label>&nbsp;&nbsp;
+    <input type="radio" id="scale5" name="activeness" value="5">
+    <label for="scale5">5: Very active(physically demanding job/challenging excercise routine)</label><br><br>
+
+    <h5 align = "center" style ="color:rgb(127, 127, 218)">Calculate Calories Intake for one day</h5>
+    <b>Breakfast</b><br><!--0,1,2 is for accessing list in the calIntake-->
+    <input type="radio" id="chickenRice" name="breakfast" value="0">
+    <label for="chickenRice">Chicken Rice</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="wontonNoodle" name="breakfast" value="1">
+    <label for="wontonNoodle">Wonton Noodle</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="duckRice" name="breakfast" value="2">
+    <label for="duckRice">Duck Rice</label><br>
+    <div class="form-group">
+        <label for="bServing">Serving portion</label>
+        <input type="int" name ="bServing" placeholder="Default = 1">
+    </div>
+
+    <hr>
+    <b>Lunch</b><br>
+    <input type="radio" id="chickenRice" name="lunch" value="0">
+    <label for="chickenRice">Chicken Rice</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="wontonNoodle" name="lunch" value="1">
+    <label for="wontonNoodle">Wonton Noodle</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="duckRice" name="lunch" value="2">
+    <label for="duckRice">Duck Rice</label><br>
+    <div class="form-group">
+        <label for="lServing">Serving portion</label>
+        <input type="int" name ="lServing" placeholder="Default = 1">
+    </div>
+    <hr>
+    <b>Dinner</b><br>
+    <input type="radio" id="chickenRice" name="dinner" value="0">
+    <label for="chickenRice">Chicken Rice</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="wontonNoodle" name="dinner" value="1">
+    <label for="wontonNoodle">Wonton Noodle</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="duckRice" name="dinner" value="2">
+    <label for="duckRice">Duck Rice</label><br>
+    <div class="form-group">
+        <label for="dServing">Serving portion</label>
+        <input type="int" name ="dServing" placeholder="Default = 1">
+    </div><br><br>
+    <button type="submit" class="btn btn-outline-primary">Calculate</button><br>
+</form> 
+{%if calNeed !=0 or totalIntake!=0%}<!--Display if user got put smth-->
+<h5 align = "center" style ="color:rgb(127, 127, 218)">Calculation Results</h5>
+{%endif%}
+<p align = "center">
+{%if calNeed!=0%}<!--Display if user got input the weight, height and age-->
+<br>Your estimated calories requirement per day is <b>{{calNeed}} kcals</b>
+    {%if bmi <18.5%} <!--Underweight BMI-->
+        <p align = "center">With a BMI of <b style="color:rgb(194, 22, 22)">{{bmi}}</b>, you should aim to <b style="color:rgb(194, 22, 22)">Increase</b> intake to a healthy level</p>
+    {%elif bmi <25 %} <!--Healthy BMI--->
+        <p align = "center">With a BMI of <b style="color:green">{{bmi}}</b>, you should aim to <b style="color:green">Maintain</b> your intake</p>
+    {%else%} <!--Overweight and Obese BMI--->
+    <p align = "center">With a BMI of <b style="color:rgb(194, 22, 22)">{{bmi}}</b>, you should aim to <b style="color:rgb(194, 22, 22)">Decrease</b> intake to a healthy level</p>
+    {%endif%}
+{%endif%}
+{%if totalIntake!=0%}<!--Display if user got input their daily calorie intake-->
+<p align = "center">Your estimated intake for the day is <b>{{totalIntake}} kcals</b></p>
+{%endif%}
+
+{%if calNeed !=0 and totalIntake!=0%}
+    {%if (totalIntake - calNeed) >200 %}
+    <p align = "center">At your current calories intake rate, your BMI will <b>Increase</b> over time</p>
+
+    {%elif (calNeed - totalIntake)>200%}
+    <p align = "center">At your current rate calories intake, your BMI will <b>Decrease</b> over time</p>
+
+    {%else%}
+    <p align = "center">At your current rate calories intake, your BMI will be <b>Maintained</b> over time</p>
+    {%endif%}
+<br><br><br></p>
+{%endif%}
+
+{%endblock%}
