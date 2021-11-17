@@ -14,8 +14,10 @@
       id="firstName"
       name="firstName"
       placeholder="Enter first name"
+      required
     />
   </div>
+  <!--Last Name-->
   <div class="form-group">
     <label for="lastName">Last Name</label>
     <input
@@ -35,6 +37,7 @@
       id="email"
       name="email"
       placeholder="Enter email"
+      required
     />
   </div>
   <!--Mobile number-->
@@ -79,6 +82,7 @@
       id="password1"
       name="password1"
       placeholder="Enter password"
+      required
     />
   </div>
   <!--Confirm Password-->
@@ -92,7 +96,26 @@
       placeholder="Confirm Password"
     />
   </div>
-  <br />
+  <!--Disability Checkboxes-->
+  <fieldset>
+  <legend>Disabilities</legend>
+  <!--Diabetes-->
+  <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="Diabetes" id="flexCheckDefault" name="disability"/>
+  <label class="form-check-label" for="flexCheckDefault">
+    Diabetes
+  </label>
+  </div>
+  <!--Handicapped-->
+  <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="Crutches" id="flexCheckChecked" name="disability" />
+  <label class="form-check-label" for="flexCheckChecked">
+    Handicap (Crutches)
+  </label>
+  </div>
+  </fieldset>
+
+  <br/>
   <button type="submit" class="btn btn-outline-primary">Sign Up</button>
 </form>
 {% endblock %}

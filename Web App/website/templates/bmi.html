@@ -1,0 +1,126 @@
+{% extends "base.html"%}
+<!--Title-->
+{% block title%}
+BMI Calculator
+{% endblock %}
+
+<!--Calculate BMI for the user-->
+{% block content %}
+<!--For the tables-->
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+</style>
+
+<form method="POST">
+    <h3 align="center">BMI Calculator</h3>
+    <!--weight-->
+    <div class="form-group">
+      <label for="weight">Weight (KG)</label>
+      <input type="text" name ="weight" placeholder="Enter weight in KG">
+    </div>
+    <!--height-->
+    <div class="form-group">
+      <label for="height">Height (CM)</label>
+      <input type="text" name="height" placeholder="Enter height in CM">
+    </div>
+    <br />
+    <button type="submit" class="btn btn-outline-primary">Calculate BMI</button>
+    <div>
+        {%if bmi != 0%}
+        <h4><br><br>Your BMI is {{bmi}}</h4>
+        {% if bmi<18.5  %}  <!--Underweight BMI-->
+            <p>You are in the <b style="color:rgb(194, 22, 22)">Underweight BMI</b> range! See how you can achieve Healthy BMI in our <a href="/calories">Calories</a> page</p>
+        <table><!--https://www.healthline.com/health/underweight-health-risks#surgical-complications-->
+            <tr>
+                <th>Health Risk</th>
+                <th>Potential Issues</th>
+            </tr>
+            <tr>
+                <td>Malnutrition</td>
+                <td>Hair loss, teeth issues, anemia, vitamins deficiency</td>
+            </tr>
+            <tr>
+                <td>Decreased immune function</td>
+                <td>Get sick easily</td>
+            </tr>
+            <tr>
+                <td>Increased risk of surgical complication</td>
+                <td>More risk of developing issues after surgery</td>
+            </tr>
+        </table>
+        {%elif bmi <25 %} <!--Healthy BMI--->
+            <p>You are in the <b style="color:green">Healthy BMI</b> range! See how you can maintain Healthy BMI in our <a href="/calories">Calories</a> page</p>
+            <br>
+            <p>Please ensure your BMI is maintained for optimal health!</p>
+
+        {%else%} <!--Overweight and Obese BMI--->
+        <p>You are in the <b style="color:rgb(194, 22, 22)">Overweight/Obese BMI</b> range! See how you can achieve Healthy BMI in our <a href="/calories">Calories</a> page</p>
+        <table><!--https://www.hsph.harvard.edu/obesity-prevention-source/obesity-consequences/health-effects/-->
+            <tr>
+                <th>Health Risk</th>
+                <th>Potential Issues</th>
+            </tr>
+            <tr>
+                <td>Diabetes</td>
+                <td>Chronic disease, leading to other heal complications including kidney failure</td>
+            </tr>
+            <tr>
+                <td>Cardiovascular Disease</td>
+                <td>Artery disease, strokes,cardiovascular death</td>
+            </tr>
+            <tr>
+                <td>Cancer</td>
+                <td>Obesity associated with cancers of esophagus, pancreas, kidney and more</td>
+            </tr>
+            <tr>
+                <td>Depression</td>
+                <td>Obese individuals are more likely to become depressed, vice-versa</td>
+            </tr>
+            <tr>
+                <td>Reproduction Issues</td>
+                <td>Affects both genders, but impact of obesity on women are more clear(primarily ovulatory infertility)</td>
+            </tr>
+            <tr>
+                <td>Respiratory Disease</td>
+                <td>Obesity impairs respiratory functions, leading to respiratory issues</td>
+            </tr>
+            <tr>
+                <td>Memory Functions</td>
+                <td>Strong association with Alzheimer's disease/Dementia, oberse people are at higher risk</td>
+            </tr>
+            <tr>
+                <td>Musculoskeletal Disorders</td>
+                <td>Strains bones, muscle and joints, higher risk of arthritis</td>
+            </tr>
+            <tr>
+                <td>Mortality</td>
+                <td>Shorter expected life-span due to vulnerability to diseases</td>
+            </tr>
+            <tr>
+                <td>Many others</td>
+                <td>Many other health issues related to obesity</td>
+            </tr>
+        </table>
+
+        {%endif%}<!--End of category if statement-->
+        
+        {%endif%}
+    </div>
+  </form>
+
+
+{% endblock %}
