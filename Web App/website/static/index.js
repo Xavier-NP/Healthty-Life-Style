@@ -17,5 +17,3 @@ function deleteDis(disId){
         window.location.href = "/disabilities";
     });
 }
-
-// BMI Function

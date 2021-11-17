@@ -48,7 +48,7 @@ def logout():
     logout_user()
     return redirect(url_for('auth.login'))
 
-#Signup
+#Sign-up Route
 @auth.route('/sign-up',methods=['GET','POST'])
 def sign_up():
     if request.method =='POST':
@@ -109,15 +109,12 @@ def sign_up():
             
     return render_template("sign_up.html", user = current_user)
 
+#User-Info Route
 @auth.route('/user-info')
 @login_required
 def userInfo():
     return render_template("user_info.html",user = current_user)
 
-@auth.route('/med-hist')
-@login_required
-def medHist():
-    return render_template("med_hist.html",user = current_user)
 
 
 #Calculate BMI
