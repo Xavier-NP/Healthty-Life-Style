@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
+from werkzeug.security import generate_password_hash
 
 #Assigning Database Module
 db = SQLAlchemy()
@@ -45,18 +46,35 @@ def create_app():
     
     return app
 
-#Initializing Disabilities
+#Initializing Data
     
 def init_Disabilities(app):
-    from .models import Disability
+    from .models import Disability,Role,User
     disability_names= ["Diabetes","Crutches"] #Ensure that name is EXACTLY THE SAME as checkbox name in sign_up.html
+    role_names = ["Patient","Doctor"] #Ensure that name is EXACTLY THE SAME as checkbox name in sign_up.html
     with app.app_context():
-        check = Disability.query.filter_by(id=1).first()
-        if not check:
-                for x in range(len(disability_names)):
-                    new_disability = Disability(disName=disability_names[x])
-                    db.session.add(new_disability)
-                    db.session.commit()
+        #Disabilities
+        check1 = Disability.query.filter_by(id=1).first()
+        check2 = Role.query.filter_by(id=1).first()
+        if (not check1) and (not check2):
+            for x in range(len(disability_names)):
+                new_disability = Disability(disName=disability_names[x])
+                db.session.add(new_disability)
+                                   
+            for x in range(len(role_names)):
+                 new_role=Role(roleName=role_names[x])
+                 db.session.add(new_role)
+                 
+            #Inserting Doctors
+            new_doctor = User(first_name="Test",
+                              last_name="Doctor",
+                              email="testdoctor@gmail.com",
+                              password=generate_password_hash("Pa$$w0rd",method='sha256'),
+                              role_id=2
+                              )
+            db.session.add(new_doctor)
+            db.session.commit()
+                
         
     
         
