@@ -77,4 +77,3 @@ def delete_dis():
             db.session.commit()
     
     return jsonify({})
-

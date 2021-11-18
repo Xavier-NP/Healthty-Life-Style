@@ -39,15 +39,15 @@ def create_app():
     login_manager.login_view = 'auth.login' #Redirects to login page if trying to access login_required routes
     login_manager.init_app(app)
     
+    
     #Defining to the app on how to load a user
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
     
+    
     return app
 
-def create_api(app):
-    api=Api(app)
 
 #Initializing Data
     

@@ -1,3 +1,4 @@
+aniso8601==9.0.1
 autopep8==1.6.0
 beautifulsoup4==4.9.1
 certifi==2020.6.20
@@ -12,6 +13,7 @@ ffmpeg==1.4
 ffprobe==0.5
 Flask==2.0.2
 Flask-Login==0.5.0
+Flask-RESTful==0.3.9
 Flask-SQLAlchemy==2.5.1
 future==0.18.2
 greenlet==1.1.2
@@ -40,6 +42,7 @@ PyQt5-sip==12.9.0
 python-dateutil==2.8.1
 pyttsx3==2.90
 pytz==2020.1
+pywin32==228
 requests==2.24.0
 six==1.15.0
 soupsieve==2.0.1
