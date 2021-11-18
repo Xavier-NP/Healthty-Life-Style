@@ -66,15 +66,15 @@ def disability():
     return render_template("med_hist.html",user = current_user)
 
 #Delete disability
-@views.route('/delete-disability',methods=['POST'])
-def delete_dis():
-    dis = json.loads(request.disName)
-    disId = dis['disId']
-    dis = Disability.query.get(disId)
-    if dis:
-        if dis.disUser_id == current_user.id:
-            db.session.delete(dis)
-            db.session.commit()
+
+##@views.route('/delete-disability',methods=['POST'])
+#def delete_dis():
+#    disId = dis['disId']
+#    dis = Disability.query.get(disId)
+#    if dis:
+#        if dis.disUser_id == current_user.id:
+ #           db.session.delete(dis)
+ #           db.session.commit()
     
-    return jsonify({})
+ #   return jsonify({})
 

@@ -14,12 +14,13 @@ User Info
 <ul class="list-group list-group-flush" id="disabilities">
     {% for dis in user.disabilities %}
     <li class="list-group-item">{{  dis.disName  }}
-        <button type="button" class="close" onClick="deleteDis({{dis.id}})">
+        <!--<button type="button" class="close" onClick="deleteDis({{dis.id}})">
             <span aria-hidden="true">&times;</span>
-        </button>
+        </button>-->
     </li>
     {% endfor %}
 </ul>
+<!--
     <form method="POST">
         <textarea name="disability" id="disability" class="form-control"></textarea>
         <br />
@@ -28,8 +29,8 @@ User Info
         </div>
     </form>
 
-<hr>
-
+<hr>-->
+<br>
 <h5>Family History</h5>
 <ol>
     <li>High Cholestrol</li>
