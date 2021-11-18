@@ -33,6 +33,8 @@ psycopg2-binary==2.9.1
 psycopg2-pool==1.1
 pycodestyle==2.8.0
 pycparser==2.20
+pycryptodome==3.11.0
+pycryptodomex==3.11.0
 pygame==2.0.1
 pyparsing==2.4.7
 pyperclip==1.8.0

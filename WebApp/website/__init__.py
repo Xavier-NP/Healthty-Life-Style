@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from os import path
 from flask_login import LoginManager
-from werkzeug.security import generate_password_hash
+import hashlib
 
 #Assigning Database Module
 db = SQLAlchemy()
@@ -13,7 +13,7 @@ DB_NAME = "database.db"
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'GUMMYKKB'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://cccleldibyicwz:6fb892ad015d8b6e71dbd5d05c37669a573ceeffdf35c957aa55c0c375fdf4ce@ec2-3-231-69-204.compute-1.amazonaws.com:5432/d6ab7bo6rdggh5" #Database Storage LOCAL = sqlite:///{DB_NAME} Server= 
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgres://cccleldibyicwz:6fb892ad015d8b6e71dbd5d05c37669a573ceeffdf35c957aa55c0c375fdf4ce@ec2-3-231-69-204.compute-1.amazonaws.com:5432/d6ab7bo6rdggh5" #Database Storage LOCAL = sqlite:///{DB_NAME} Server= 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app) #Initializing the Database
     
@@ -55,6 +55,8 @@ def init_Disabilities(app):
     from .models import Disability,Doctor,Patient
     disability_names= ["Diabetes","Crutches"] #Ensure that name is EXACTLY THE SAME as checkbox name in sign_up.html
     role_names = ["Patient","Doctor"] #Ensure that name is EXACTLY THE SAME as checkbox name in sign_up.html
+    pw = hashlib.sha256()
+    ph = "Pa$$w0rd"
     with app.app_context():
         #Disabilities
         check1 = Disability.query.filter_by(id=1).first()
@@ -63,15 +65,13 @@ def init_Disabilities(app):
             for x in range(len(disability_names)):
                 new_disability = Disability(disName=disability_names[x])
                 db.session.add(new_disability)
-                                   
-            # for x in range(len(role_names)):
-            #      new_role=Role(roleName=role_names[x])
-            #      db.session.add(new_role)
+            
+            pw.update(ph.encode("utf-8"))
                  
             #Inserting Doctors
             new_doctor = Doctor(
                 email="testdoctor@gmail.com",
-                password=generate_password_hash("Pa$$w0rd",method='sha256'),
+                password=pw.digest().hex(),
                 full_name= "test doctor",
                 )
             
@@ -79,9 +79,9 @@ def init_Disabilities(app):
             db.session.commit()
             
             new_doctor = Doctor(
-                email="Urmader@gmail.com",
-                password=generate_password_hash("Pa$$w0rd",method='sha256'),
-                full_name = 'mader die'
+                email="ginna@gmail.com",
+                password=pw.digest().hex(),
+                full_name = 'ginna pbt'
                 )
             
             db.session.add(new_doctor)

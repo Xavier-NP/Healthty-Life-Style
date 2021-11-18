@@ -2,8 +2,9 @@
 
 import re
 from flask import Blueprint,render_template,request,flash,redirect,url_for
+from sqlalchemy.sql.functions import user
 from .models import Disability, Doctor,Patient, User,CalsBMI
-from werkzeug.security import generate_password_hash,check_password_hash
+import hashlib
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 import datetime
@@ -12,6 +13,7 @@ import datetime
 
 auth = Blueprint('auth',__name__)
 NoneType=type(None)
+pw = hashlib.sha256()
 ##Routes
 
 #Redirect
@@ -32,7 +34,7 @@ def login():
         #Check if user exists on the Database using email
         user = User.query.filter_by(email=email).first()
         if user:
-            if check_password_hash(user.password,password):
+            if check_pw(user,password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True) #Allows for website to remember user is logged in the current session
                 return redirect(url_for('views.home'))
@@ -88,15 +90,14 @@ def sign_up():
         elif not disabilities: #Check if at least 1 disability is selected
             flash('Please select a disability!',category='error')
         else:
-            #Check which doctor the user selected
-            
+            pw.update(password1.encode("utf-8"))
             #Creating New user
             new_user = Patient(first_name=first_name,
                             last_name=last_name, 
                             email=email, 
                             mobileNum=mobileNum, 
                             nric=nric, addr=addr, 
-                            password=generate_password_hash(password1,method='sha256'),
+                            password=pw.digest().hex(),
                             doctor_id=doctor
                             #role_id=1 # Setting all users that login to be Patients
                             )
@@ -219,6 +220,16 @@ def calories():
 
     return render_template("calories.html",calNeed = calNeed, totalIntake = totalIntake,bmi=bmi,user = current_user)
 
+
+def check_pw(user,e_pw):
+        ph = hashlib.sha256()
+        ph.update(e_pw.encode("utf-8"))
+        hashed_pw = ph.digest().hex()
+        if user.password==hashed_pw:
+            return True
+        else:
+            return False    
+    
 
 #@auth.route('/health-trend',methods = ['GET','POST'])
 #@login_required

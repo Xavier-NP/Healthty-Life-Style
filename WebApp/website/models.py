@@ -3,6 +3,7 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
+
 ##Defining Schemas
 
 #Class Disability
@@ -32,7 +33,7 @@ class User(db.Model,UserMixin):
     CalsBMIs = db.relationship('CalsBMI')
     __mapper_args__ = {'polymorphic_on':type}
 
-    
+
     
     def fullName(self):
         return f"{self.first_name} {self.last_name}"
@@ -67,7 +68,7 @@ class Doctor(User):
     patients= db.relationship("Patient",primaryjoin="(Doctor.doctor_id==Patient.doctor_id)",backref=db.backref(("doctor")))
     
 
-#class to store calories and BMI data
+#Class to store calories and BMI data
 class CalsBMI(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     calories = db.Column(db.Float(10))
