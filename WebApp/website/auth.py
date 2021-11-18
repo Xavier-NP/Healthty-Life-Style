@@ -268,7 +268,8 @@ def health_trend():
 
     return render_template("health_trend.html",user = current_user)
 
-        
+
+#Check User Password if correct Function
 def check_pw(user,e_pw):
         ph = hashlib.sha256()
         ph.update(e_pw.encode("utf-8"))
