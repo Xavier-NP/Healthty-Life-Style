@@ -34,6 +34,7 @@ class User(db.Model,UserMixin):
     password = db.Column(db.String(150))
     notes = db.relationship('Note')
     type = db.Column('type',db.String(50))
+    CalsBMIs = db.relationship('CalsBMI')
     __mapper_args__ = {'polymorphic_on':type}
 
     
@@ -67,7 +68,14 @@ class Doctor(User):
     full_name=db.Column(db.String(50))
     patients= db.relationship("Patient",primaryjoin="(Doctor.doctor_id==Patient.doctor_id)",backref=db.backref(("doctor")))
     
-    
+
+#class to store calories and BMI data
+class CalsBMI(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    calories = db.Column(db.Float(10))
+    bmi = db.Column(db.Float(4))
+    CalsBMIdate = db.Column(db.Date())
+    CalsBMIid = db.Column(db.Integer,db.ForeignKey('user.id'))
         
     
 
