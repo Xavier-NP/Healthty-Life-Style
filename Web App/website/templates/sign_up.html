@@ -96,8 +96,9 @@
       placeholder="Confirm Password"
     />
   </div>
+
   <!--Disability Checkboxes-->
-  <fieldset>
+  <fieldset >
   <legend>Disabilities</legend>
   <!--Diabetes-->
   <div class="form-check">
@@ -115,7 +116,26 @@
   </div>
   </fieldset>
 
+   <!--Doctor Checkboxes-->
+  <fieldset >
+  <legend>Doctor</legend>
+  <!--test docter-->
+  <div class="form-check">
+  <input class="form-check-input" type="radio" value="1" id="flexRadioDefault" name="doctor"/>
+  <label class="form-check-label" for="flexRadioDefault">
+    Test Doctor
+  </label>
+  </div>
+  <!--ur mader-->
+  <div class="form-check">
+  <input class="form-check-input" type="radio" value="2" id="flexRadioChecked" name="doctor" />
+  <label class="form-check-label" for="flexRadioChecked">
+    ur mader
+  </label>
+  </div>
+  </fieldset>
+
   <br/>
-  <button type="submit" class="btn btn-outline-primary">Sign Up</button>
+  <button type="submit" class="btn btn-outline-primary" align='center'>Sign Up</button>
 </form>
 {% endblock %}
