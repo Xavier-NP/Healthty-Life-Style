@@ -1,11 +1,11 @@
 {% extends "base.html"%}
 <!--Title-->
 {%block title%}
-Notes
+Diary
 {% endblock %}
 <!--Content-->
 {%block content%}
-<h1 align="center">Notes</h1>
+<h1 align="center">Diary</h1>
 <ul class="list-group list-group-flush" id="notes">
     {% for note in user.notes %}
     {{ note.date  }}

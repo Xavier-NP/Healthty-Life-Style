@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask, app
 from flask_sqlalchemy import SQLAlchemy
+from flask_restful import Api
 from os import path
 from flask_login import LoginManager
 from werkzeug.security import generate_password_hash
@@ -12,7 +13,7 @@ DB_NAME = "database.db"
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'GUMMYKKB'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://cccleldibyicwz:6fb892ad015d8b6e71dbd5d05c37669a573ceeffdf35c957aa55c0c375fdf4ce@ec2-3-231-69-204.compute-1.amazonaws.com:5432/d6ab7bo6rdggh5" #Database Storage
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_NAME}" #Database Storage LOCAL = sqlite:///{DB_NAME} Server= postgres://cccleldibyicwz:6fb892ad015d8b6e71dbd5d05c37669a573ceeffdf35c957aa55c0c375fdf4ce@ec2-3-231-69-204.compute-1.amazonaws.com:5432/d6ab7bo6rdggh5
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app) #Initializing the Database
     
@@ -44,6 +45,9 @@ def create_app():
         return User.query.get(int(id))
     
     return app
+
+def create_api(app):
+    api=Api(app)
 
 #Initializing Data
     
