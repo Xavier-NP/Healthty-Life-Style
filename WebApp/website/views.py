@@ -66,8 +66,8 @@ def disability():
     return render_template("med_hist.html",user = current_user)
 
 #Delete disability
-@views.route('/delete-disability',methods=['POST'])
-def delete_dis():
+#@views.route('/delete-disability',methods=['POST'])
+#def delete_dis():
     dis = json.loads(request.disName)
     disId = dis['disId']
     dis = Disability.query.get(disId)

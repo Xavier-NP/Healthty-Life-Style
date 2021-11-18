@@ -2,10 +2,11 @@
 
 import re
 from flask import Blueprint,render_template,request,flash,redirect,url_for
-from .models import Disability, Doctor,Patient, User
+from .models import Disability, Doctor,Patient, User,CalsBMI
 from werkzeug.security import generate_password_hash,check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+import datetime
 
 
 
@@ -205,11 +206,20 @@ def calories():
             totalIntake=0
     else:
         totalIntake=0
-        
+    if bmi!=0 and totalIntake!=0:
+        dateNow = datetime.datetime.now().date()
+        exist = CalsBMI.query.filter_by(CalsBMIdate = dateNow).first()
+        if exist:# if the date already exists
+            flash(f'You can record BMI and Calories input once per day! [{exist.calories} kcals and BMI of {exist.bmi} recorded]',category='error')
+        else:
+            new_CalsBMI = CalsBMI(calories = totalIntake, bmi = bmi, CalsBMIdate = dateNow, CalsBMIid = current_user.id)
+            db.session.add(new_CalsBMI)
+            db.session.commit()
+            flash('Your BMI and Calories input has been recorded',category='success')
 
     return render_template("calories.html",calNeed = calNeed, totalIntake = totalIntake,bmi=bmi,user = current_user)
 
 
-
-
-            
+#@auth.route('/health-trend',methods = ['GET','POST'])
+#@login_required
+#def health_trend():
