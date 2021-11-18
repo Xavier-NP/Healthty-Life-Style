@@ -21,12 +21,7 @@ class Note(db.Model):
     date = db.Column(db.DateTime(timezone=True),default=func.now())
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     
-#Class Roles
-# class Role(db.Model):
-#     id=db.Column(db.Integer,primary_key=True)
-#     roleName=db.Column(db.Integer,unique=True)
-#     users = db.relationship("User")
-
+    
 #Class User
 class User(db.Model,UserMixin):
     id = db.Column(db.Integer,primary_key=True)
@@ -37,7 +32,6 @@ class User(db.Model,UserMixin):
     __mapper_args__ = {'polymorphic_on':type}
 
     
-    #role_id = db.Column(db.Integer,db.ForeignKey("role.id"))
     
     def fullName(self):
         return f"{self.first_name} {self.last_name}"
@@ -56,6 +50,10 @@ class Patient(User):
     addr = db.Column(db.String(150))
     disabilities = db.relationship('Disability',secondary=ailments,backref = db.backref("ailments", lazy = 'dynamic'))
     doctor_id = db.Column(db.Integer,db.ForeignKey('doctor.doctor_id'))
+    
+    def dName(self):
+        doctor=Doctor.query.filter_by(doctor_id=self.doctor_id).first()
+        return f"{doctor.full_name}"
     
 #Class Doctor
 class Doctor(User):
