@@ -17,7 +17,7 @@ def home():
     return render_template("home.html",user = current_user)
 
 #Notes
-@views.route('/diary',methods = ['GET','POST'])
+@views.route('/notes',methods = ['GET','POST'])
 @login_required
 def note():
     if request.method=='POST':
@@ -30,7 +30,7 @@ def note():
             db.session.add(new_note)
             db.session.commit()
             flash('Note Added!',category='success')
-    return render_template("diary.html",user = current_user)
+    return render_template("notes.html",user = current_user)
 
 @views.route('/about')
 def about():
@@ -77,3 +77,5 @@ def delete_note():
             db.session.commit()
     
     return jsonify({})
+
+

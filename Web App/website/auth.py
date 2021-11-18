@@ -2,18 +2,11 @@
 
 import re
 from flask import Blueprint,render_template,request,flash,redirect,url_for
-from flask.helpers import send_file
 from .models import Disability, Doctor,Patient, User,CalsBMI
 from werkzeug.security import generate_password_hash,check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 import datetime
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
-from io import BytesIO, StringIO
-import base64
-import mpld3
-
 
 
 
@@ -215,7 +208,6 @@ def calories():
         totalIntake=0
     if bmi!=0 and totalIntake!=0:
         dateNow = datetime.datetime.now().date()
-        #dateNow=datetime.date(2021, 11, 14)#place data into the db to test
         exist = CalsBMI.query.filter_by(CalsBMIdate = dateNow).first()
         if exist:# if the date already exists
             flash(f'You can record BMI and Calories input once per day! [{exist.calories} kcals and BMI of {exist.bmi} recorded]',category='error')
@@ -231,40 +223,4 @@ def calories():
 @auth.route('/health-trend',methods = ['GET','POST'])
 @login_required
 def health_trend():
-    data = CalsBMI.query.order_by(CalsBMI.CalsBMIdate).all()
-    dateList = []
-    caloriesList = []
-    bmiList = []
-    for i in data:#append data into list for visualisation
-        dateList.append(i.CalsBMIdate)
-        caloriesList.append(i.calories)
-        bmiList.append(i.bmi)
     
-    #create plot
-    fig = plt.figure(figsize=(10,8),constrained_layout=True)
-    gs = GridSpec(nrows=2,ncols=2,figure = fig)
-    ax1 = fig.add_subplot(gs[0,:])
-    ax1.plot(dateList,bmiList,'b-o',label = 'BMI')
-    ax1.set_title('BMI Trend', fontsize=15)
-    ax1.set_xlabel('Date')
-    ax1.set_ylabel('BMI')
-    ax1.set_ylim(bottom = 0, top = round(max(bmiList)+5))
-    #ax1.legend(loc='upper right')
-
-
-    ax2 = fig.add_subplot(gs[1,:])
-    ax2.plot(dateList, caloriesList, 'r-+', label='Calories Intake')
-    ax2.set_title('Calories Intake', fontsize=15)
-    ax2.set_xlabel('Date')
-    ax2.set_ylabel('Calories Intake')
-    ax2.set_ylim(bottom=0,top = round(max(caloriesList)+1000))
-    #ax2.legend(loc='lower right')
-    
-    fig.suptitle("Dashboard for health trends",fontsize = 25)
-
-    #fig.savefig('website/static/health_trend.png',dpi=300)
-    plt.show()
-
-    return render_template("health_trend.html",user = current_user)
-
-        
