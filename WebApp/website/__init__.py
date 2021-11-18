@@ -13,7 +13,7 @@ DB_NAME = "database.db"
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'GUMMYKKB'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgres://cccleldibyicwz:6fb892ad015d8b6e71dbd5d05c37669a573ceeffdf35c957aa55c0c375fdf4ce@ec2-3-231-69-204.compute-1.amazonaws.com:5432/d6ab7bo6rdggh5" #Database Storage LOCAL = sqlite:///{DB_NAME} Server= 
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://cccleldibyicwz:6fb892ad015d8b6e71dbd5d05c37669a573ceeffdf35c957aa55c0c375fdf4ce@ec2-3-231-69-204.compute-1.amazonaws.com:5432/d6ab7bo6rdggh5" #Database Storage LOCAL = sqlite:///{DB_NAME} Server= 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app) #Initializing the Database
     
