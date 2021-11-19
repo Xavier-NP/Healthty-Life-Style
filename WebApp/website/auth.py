@@ -233,13 +233,16 @@ def calories():
 @login_required
 def health_trend():
     data = CalsBMI.query.order_by(CalsBMI.CalsBMIdate).all()
-    dateList = []
-    caloriesList = []
-    bmiList = []
-    for i in data:#append data into list for visualisation
-        dateList.append(i.CalsBMIdate)
-        caloriesList.append(i.calories)
-        bmiList.append(i.bmi)
+    #dateList = []
+    #caloriesList = []
+    #bmiList = []
+    dateList = ['12 Jan','13 Jan','14 Jan','15 Jan','16 Jan','17 Jan','18 Jan']
+    caloriesList = [2100,2200,2300,2400,2300,2200,2000]
+    bmiList = [21,21.5,22,22,20,21,20]
+    #for i in data:#append data into list for visualisation
+        #dateList.append(i.CalsBMIdate)
+        #caloriesList.append(i.calories)
+        #bmiList.append(i.bmi)
     
     #create plot
     fig = plt.figure(figsize=(10,8),constrained_layout=True)
