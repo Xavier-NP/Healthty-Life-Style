@@ -1,12 +1,14 @@
-from .website import create_app
-from .website import db
-from .website.models import Note,User
+from website import create_app
+from website import db
+from website.models import Note,User
 from flask_restful import Api,Resource,reqparse,fields,marshal_with
 from sqlalchemy import func
 #!!!!!!!!!!! Before Deploying,change to .website !!!!!!!!!!! 
 app = create_app()
 
 
+
+# Move api to another file
 api = Api(app)
 
 
