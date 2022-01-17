@@ -1,5 +1,6 @@
 #Authenticated Routes for Website i.e. sites requiring authentication
 
+from calendar import month
 import re
 from flask import Blueprint,render_template,request,flash,redirect,url_for
 from flask.helpers import send_file
@@ -14,6 +15,7 @@ from matplotlib.gridspec import GridSpec
 from io import BytesIO, StringIO
 import base64
 import mpld3
+import datetime as dt
 
 
 
@@ -232,25 +234,27 @@ def calories():
 @auth.route('/health-trend',methods = ['GET','POST'])
 @login_required
 def health_trend():
-    data = CalsBMI.query.order_by(CalsBMI.CalsBMIdate).all()
+    #data = CalsBMI.query.order_by(CalsBMI.CalsBMIdate).all()
     #commented data are for testing
-    dateList = []
-    caloriesList = []
-    bmiList = []
+    #dateList = []
+    #caloriesList = []
+    #bmiList = []
     #dateList = ['12 Jan','13 Jan','14 Jan','15 Jan','16 Jan','17 Jan','18 Jan']
     #caloriesList = [2100,2200,2300,2400,2300,2200,2000]
     #bmiList = [21,21.5,22,22,20,21,20]
-    for i in data:#append data into list for visualisation
-        dateList.append(i.CalsBMIdate)
-        caloriesList.append(i.calories)
-        bmiList.append(i.bmi)
+    #for i in data:#append data into list for visualisation
+    #    dateList.append(i.CalsBMIdate)
+    #    caloriesList.append(i.calories)
+    #    bmiList.append(i.bmi)
+
+    dateList,caloriesList, bmiList = chooseData()
     
     #create plot
     fig = plt.figure(figsize=(10,8),constrained_layout=True)
     gs = GridSpec(nrows=2,ncols=2,figure = fig)
     ax1 = fig.add_subplot(gs[0,:])
     ax1.plot(dateList,bmiList,'b-o',label = 'BMI')
-    ax1.set_title('BMI Trend', fontsize=15)
+    
     ax1.set_xlabel('Date')
     ax1.set_ylabel('BMI')
     ax1.set_ylim(bottom = 0, top = round(max(bmiList)+5))
@@ -271,6 +275,75 @@ def health_trend():
     plt.show()
 
     return render_template("health_trend.html",user = current_user)
+
+def chooseData(): #function to see which data to use for the health trend
+    data = CalsBMI.query.order_by(CalsBMI.CalsBMIdate).all()
+    dateList = []
+    caloriesList = []
+    bmiList = []
+    for i in data:#append date into list first
+        dateList.append(i.CalsBMIdate)
+
+    yearList = []
+    monthList = []
+
+    dList = []
+
+    for i in dateList:
+        if i.year not in yearList: #check to number of years
+            yearList.append(i.year)
+    yearList = yearList.sort()
+    ############# Error with the yearList in none type #####################################
+    if yearList is None:
+        dList = ['12 Jan','13 Jan','14 Jan','15 Jan','16 Jan','17 Jan','18 Jan']
+        caloriesList = [2100,2200,2300,2400,2300,2200,2000]
+        bmiList = [21,21.5,22,22,20,21,20]
+        return dList,caloriesList,bmiList
+    ########################################################################################
+    
+    if len(yearList)<2:  #if the lenght of the years in records are lower than 2, check number of months
+        for i in dateList:
+            if i.month not in monthList:
+                monthList.append(i.month)
+        monthList = monthList.sort()
+        if len(monthList)<12: #if the number of months is lower than 12, use the specific dates
+            newDateList = dateList[-12:]#get the last 12 dates
+            for i in data:
+                for j in newDateList:
+                    if j == i.CalsBMIdate:
+                        caloriesList.append(i.calories)
+                        bmiList.append(i.bmi)
+                        dList.append(j)
+            dList = dList.sort()
+            caloriesList = caloriesList.sort()
+            bmiList = bmiList.sort()
+        else:#if the number of months recorded is more than 12
+            newDateList = dateList
+            mList = []
+            for i in reversed(data):#use reversed data as we want to use the newest data
+                for j in reversed(newDateList):
+                    if j == i.CalsBMIdate and (j.month not in mList):
+                        caloriesList.append(i.calories)
+                        bmiList.append(i.bmi)
+                        mList.append(j.month) #to check if repetitive
+                        dList.append(j) #to get the specific dates
+            dList = dList.sort()
+            caloriesList = caloriesList.sort()
+            bmiList = bmiList.sort()
+    else: #if there are more than 2 years
+        newDateList = dateList
+        yList = []
+        for i in reversed(data):
+            for j in reversed(newDateList):
+                if j == i.CalsBMIdate and (j.year not in yList):
+                    caloriesList.append(i.calories)
+                    bmiList.append(i.bmi)
+                    yList.append(j.year) #to check if repetitive
+                    dList.append(j) #to get the specific dates
+        dList = dList.sort()
+        caloriesList = caloriesList.sort()
+        bmiList = bmiList.sort()
+    return dList,caloriesList,bmiList
 
 
 #Check User Password if correct Function
