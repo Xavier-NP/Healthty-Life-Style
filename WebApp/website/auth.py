@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 from io import BytesIO, StringIO
 import base64
-import mpld3
+
 
 
 
