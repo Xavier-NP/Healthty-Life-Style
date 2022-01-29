@@ -190,7 +190,23 @@ def calories():
         chickenRice = 607 #https://www.healthhub.sg/live-healthy/165/healthy_cooking
         wontonNoodle = 409 #https://www.thestar.com.my/lifestyle/viewpoints/tell-me-about/2011/02/27/malaysian-calories
         duckRice = 673 #https://www.healthxchange.sg/food-nutrition/food-tips/best-worst-singapore-hawker-chinese-food-duck-rice-fishball-noodle
-        meal = [chickenRice,wontonNoodle,duckRice]
+
+
+        #getting calories for the other food bOtherCalorie is for breakfast
+        try:
+            otherFood = float(request.form.get('bOtherCalorie'))#try to get the other food
+        except:
+            otherFood = 0 #if not, assign it to 0
+        try:
+            otherFood = float(request.form.get('lOtherCalorie'))
+        except:
+            otherFood = 0
+        try:
+            otherFood = float(request.form.get('dOtherCalorie'))
+        except:
+            otherFood = 0
+
+        meal = [chickenRice,wontonNoodle,duckRice,otherFood]
 
         #Serving size in quantity
         try:
