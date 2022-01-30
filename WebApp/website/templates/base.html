@@ -25,18 +25,18 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbar">
-                <div class = "navbar-nav">
+                <div class = "nav nav-pills red">
                     <!-- Add new Navigation Bar Items Here-->
                     {% if user.is_authenticated %} <!-- Routes accessible only after login-->
-                    <a class="nav-item nav-link" id='home' href="/home">Home</a>
-                    <a class="nav-item nav-link" id='about' href="/about">About</a> 
+                    <a class="{{ 'nav-item nav-link active' if active_page == 'home' else 'nav-item nav-link' }}" id='home' href="/home">Home</a>
+                    <a class="{{ 'nav-item nav-link active' if active_page == 'about' else 'nav-item nav-link' }}" id='about' href="/about">About</a> 
                 
                         {% if user.type=="patient" %} 
-                        <a class="nav-item nav-link" id='diary' href="/diary">Diary</a>
-                        <a class="nav-item nav-link" id='userInfo' href="/user-info">User Info</a>
-                        <a class="nav-item nav-link" id='bmi' href="/bmi">BMI</a>
-                        <a class="nav-item nav-link" id='calories' href="/calories">Calories</a>
-                        <a class="nav-item nav-link" id='health_trend' href="/health-trend">Health Trend</a>
+                        <a class="{{ 'nav-item nav-link active' if active_page == 'diary' else 'nav-item nav-link' }}" id='diary' href="/diary">Diary</a>
+                        <a class="{{ 'nav-item nav-link active' if active_page == 'userInfo' else 'nav-item nav-link' }}" id='userInfo' href="/user-info">User Info</a>
+                        <a class="{{ 'nav-item nav-link active' if active_page == 'bmi' else 'nav-item nav-link' }}" id='bmi' href="/bmi">BMI</a>
+                        <a class="{{ 'nav-item nav-link active' if active_page == 'calories' else 'nav-item nav-link' }}" id='calories' href="/calories">Calories</a>
+                        <a class="{{ 'nav-item nav-link active' if active_page == 'health_trend' else 'nav-item nav-link' }}" id='health_trend' href="/health-trend">Health Trend</a>
                         {% elif user.type=="doctor" %}
 
 
@@ -44,15 +44,23 @@
                     <a class="nav-item nav-link" id='logout' href="/logout">Logout</a>    
 
                     {% else %}<!-- Routes accessible without login-->
-                    <a class="nav-item nav-link" id='about' href="/about">About</a>
-                    <a class="nav-item nav-link" id='login' href="/login">Login</a>
-                    <a class="nav-item nav-link" id='signUp' href="/sign-up">Sign-up</a>
+                    <a class="{{ 'nav-item nav-link active' if active_page == 'about' else 'nav-item nav-link' }}" id='about' href="/about">About</a>
+                    <a class="{{ 'nav-item nav-link active' if active_page == 'login' else 'nav-item nav-link' }}" id='login' href="/login">Login</a>
+                    <a class="{{ 'nav-item nav-link active' if active_page == 'signUp' else 'nav-item nav-link' }}" id='signUp' href="/sign-up">Sign-up</a>
                     
                     {% endif %}
                 </div>
             </div>
         </nav>
 
+        <!--for the formatting of the navigation bar colors-->
+        <style>
+            .nav-pills > a.active {
+            background-color: #57a6d3 !important;
+            color: white;
+            }
+            .nav-pills > a {color: white;}
+        </style>
         <!--Flash Messages-->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
