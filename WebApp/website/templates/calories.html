@@ -8,7 +8,8 @@ Women: BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) – (4.33
 <h2 align = "center">Calories</h2>
 
 <!--Get basic info-->
-<h5 align = "center" style ="color:rgb(127, 127, 218)">Calculate Calories Requirement</h5>
+<br>
+<h4 align = "center" style ="color:rgb(53, 53, 172)">Calculate Calories Requirement</h4>
 <p>*Scroll to the bottom for calculation results</p>
 <form method="POST">
     <!--weight-->
@@ -47,7 +48,9 @@ Women: BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) – (4.33
     <input type="radio" id="scale5" name="activeness" value="5">
     <label for="scale5">5: Very active(physically demanding job/challenging excercise routine)</label><br><br>
 
-    <h5 align = "center" style ="color:rgb(127, 127, 218)">Calculate Calories Intake for one day</h5>
+    <br><br>
+    <h4 align = "center" style ="color:rgb(53, 53, 172)">Calculate Calories Intake for one day</h4>
+    <br>
     <b>Breakfast</b><br><!--0,1,2 is for accessing list in the calIntake-->
     <input type="radio" id="chickenRice" name="breakfast" value="0">
     <label for="chickenRice">Chicken Rice</label>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -108,7 +111,8 @@ Women: BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) – (4.33
     <button type="submit" class="btn btn-outline-primary">Calculate</button><br>
 </form> 
 {%if calNeed !=0 or totalIntake!=0%}<!--Display if user got put smth-->
-<h5 align = "center" style ="color:rgb(127, 127, 218)">Calculation Results</h5>
+
+<h4 align = "center" style ="color:rgb(53, 53, 172)">Calculation Results</h4>
 {%endif%}
 <p align = "center">
 {%if calNeed!=0%}<!--Display if user got input the weight, height and age-->
