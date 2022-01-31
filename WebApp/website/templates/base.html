@@ -15,6 +15,7 @@
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       crossorigin="anonymous"
     />
+    <br><br><br>
     <title>{%block title%}Home{% endblock %}</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     </head>
@@ -60,6 +61,12 @@
             color: white;
             }
             .nav-pills > a {color: white;}
+
+            .navbar{overflow: hidden;
+            background-color: #333;
+            position: fixed; /* Set the navbar to fixed position */
+            top: 0; /* Position the navbar at the top of the page */
+            width: 100%; /* Full width */}
         </style>
         <!--Flash Messages-->
         {% with messages = get_flashed_messages(with_categories=true) %}
