@@ -1,7 +1,6 @@
 aniso8601==9.0.1
 autopep8==1.6.0
 beautifulsoup4==4.10.0
-certifi==2021.10.8
 cffi==1.15.0
 chardet==4.0.0
 charset-normalizer==2.0.10
@@ -33,7 +32,6 @@ mpld3==0.5.7
 numpy==1.22.1
 olefile==0.46
 packaging==21.3
-pefile==2021.9.3
 Pillow==9.0.0
 plotly==5.5.0
 postgres==4.0
@@ -47,7 +45,6 @@ pyparsing==3.0.7
 pyperclip==1.8.2
 python-dateutil==2.8.2
 pyttsx3==2.90
-pywin32==303
 requests==2.27.1
 six==1.16.0
 soupsieve==2.3.1
