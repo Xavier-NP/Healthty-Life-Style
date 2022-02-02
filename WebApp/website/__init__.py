@@ -71,18 +71,18 @@ def init_Disabilities(app):
                  
             #Inserting Doctors
             new_doctor = Doctor(
-                email="testdoctor@gmail.com",
+                email="DrXavierKee@gmail.com",
                 password=pw.digest().hex(),
-                full_name= "test doctor",
+                full_name= "Xavier Kee",
                 )
             
             db.session.add(new_doctor)
             db.session.commit()
             
             new_doctor = Doctor(
-                email="ginna@gmail.com",
+                email="DrSins@gmail.com",
                 password=pw.digest().hex(),
-                full_name = 'ginna pbt'
+                full_name = 'Dr Sins'
                 )
             
             db.session.add(new_doctor)

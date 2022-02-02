@@ -29,7 +29,6 @@
                     <!-- Add new Navigation Bar Items Here-->
                     {% if user.is_authenticated %} <!-- Routes accessible only after login-->
                     <a class="nav-item nav-link" id='home' href="/home">Home</a>
-                    <a class="nav-item nav-link" id='about' href="/about">About</a> 
                 
                         {% if user.type=="patient" %} 
                         <a class="nav-item nav-link" id='diary' href="/diary">Diary</a>

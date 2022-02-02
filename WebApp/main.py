@@ -1,14 +1,17 @@
+from dataclasses import field
+from tokenize import String
 from website import create_app
 from website import db
-from website.models import Note,User
+from website.models import Note,User,Patient,User,Disability
 from flask_restful import Api,Resource,reqparse,fields,marshal_with
 from sqlalchemy import func
+import hashlib
+
 #!!!!!!!!!!! Before Deploying,change to .website !!!!!!!!!!! 
 app = create_app()
 
 
 
-# Move api to another file
 api = Api(app)
 
 
@@ -60,9 +63,95 @@ class UserApi(Resource):
     def get(self,user_email):
         result = User.query.filter_by(email=user_email).first()
         return result
-
+    
 api.add_resource(UserApi,"/api/user/<user_email>")
 
+# Patient API
+
+
+patient_post_args = reqparse.RequestParser()
+patient_post_args.add_argument("first_name",type=str,help="Your First Name",required=True)
+patient_post_args.add_argument("last_name",type=str,help="Your Last Name",required=True)
+patient_post_args.add_argument("email",type=str,help="Email",required=True)
+patient_post_args.add_argument("mobileNum",type=str,help="mobileNum",required=True)
+patient_post_args.add_argument("nric",type=str,help="nric",required=True)
+patient_post_args.add_argument("addr",type=str,help="addr",required=True)
+patient_post_args.add_argument("password1",type=str,help="password",required=True)
+patient_post_args.add_argument("password2",type=str,help="password",required=True)
+patient_post_args.add_argument("doctor_id",type=int,help="doctor_id",required=True)
+patient_post_args.add_argument("disabilities",type=str,action='append',help="disabilities",required=True)
+
+patient_resource_fields = {
+    'first_name':fields.String,
+    'last_name':fields.String, 
+    'email':fields.String, 
+    'mobileNum':fields.String, 
+    'nric':fields.String, 
+    'addr':fields.String, 
+    'password1':fields.String,
+    'password2':fields.String,
+    'doctor_id':fields.Integer,
+    'disabilities':fields.String,
+}
+
+class PatientApi(Resource):
+    @marshal_with(patient_resource_fields)
+    def post(self,email):
+        args = patient_post_args.parse_args()
+        ph = Patient.query.filter_by(email=email).first()
+        if ph:
+            errormsg = "User Exists"
+            return errormsg,404
+        elif len(args['email'])<3:
+            errormsg = 'Email must be more then 3 Characters'
+            return errormsg,404
+        elif len(args['first_name'])<2:
+            errormsg = 'First Name must be more than 1 Character'
+            return errormsg,404
+        elif len(args['last_name'])<2:
+            errormsg = 'Last Name must be more than 1 Character'
+            return errormsg,404
+        elif len(args['mobileNum'])!=8:
+            errormsg = 'Enter a valid 8 digit mobile number'
+            return errormsg,404
+        elif len(args['nric'])!=9:
+            errormsg = 'Enter a valid NRIC/FIN'
+            return errormsg,404
+        elif len(args['password1'])<7:
+            errormsg = 'Password must be at least 7 Characters'
+            return errormsg,404
+        elif args['password1'] != args['password2']:
+            errormsg = 'Password does not match'
+            return errormsg,404
+        elif not args['disabilities']:
+            errormsg = 'Please select a disability!'
+            return errormsg,404
+            
+        else:
+            pw = hashlib.sha256()
+            pw.update(args['password1'].encode("utf-8"))
+            patient = Patient(first_name=args['first_name'],
+                              last_name=args['last_name'],
+                              email=args['email'],
+                              mobileNum=args['mobileNum'],
+                              nric=args['nric'],
+                              addr=args['addr'],
+                              password=pw.digest().hex(),
+                              doctor_id=args['doctor_id'],
+                              
+                              )
+            for x in range(len(args['disabilities'])):
+                dist_name=Disability.query.filter_by(disName=args['disabilities'][x]).first()
+                patient.disabilities.append(dist_name)
+                
+            db.session.add(patient)   
+            db.session.commit()
+            return patient,201
+        
+
+        
+        
+api.add_resource(PatientApi,"/api/register/<email>")
 
 
 if __name__ == '__main__':
