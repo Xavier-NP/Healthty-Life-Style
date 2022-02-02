@@ -1,4 +1,5 @@
 {% extends "base.html"%}
+{% set active_page = 'calories' %}
 <!--https://www.medicalnewstoday.com/articles/319731#calculating-how-many-calories-are-burned-in-a-day-->
 <!--https://www.garnethealth.org/news/basal-metabolic-rate-calculator-->
 <!--Men: BMR = 88.362 + (13.397 x weight in kg) + (4.799 x height in cm) – (5.677 x age in years)
@@ -7,7 +8,8 @@ Women: BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) – (4.33
 <h2 align = "center">Calories</h2>
 
 <!--Get basic info-->
-<h5 align = "center" style ="color:rgb(127, 127, 218)">Calculate Calories Requirement</h5>
+<br>
+<h4 align = "center" style ="color:rgb(53, 53, 172)">Calculate Calories Requirement</h4>
 <p>*Scroll to the bottom for calculation results</p>
 <form method="POST">
     <!--weight-->
@@ -46,14 +48,23 @@ Women: BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) – (4.33
     <input type="radio" id="scale5" name="activeness" value="5">
     <label for="scale5">5: Very active(physically demanding job/challenging excercise routine)</label><br><br>
 
-    <h5 align = "center" style ="color:rgb(127, 127, 218)">Calculate Calories Intake for one day</h5>
+    <br><br>
+    <h4 align = "center" style ="color:rgb(53, 53, 172)">Calculate Calories Intake for one day</h4>
+    <br>
     <b>Breakfast</b><br><!--0,1,2 is for accessing list in the calIntake-->
     <input type="radio" id="chickenRice" name="breakfast" value="0">
     <label for="chickenRice">Chicken Rice</label>&nbsp;&nbsp;&nbsp;&nbsp;
     <input type="radio" id="wontonNoodle" name="breakfast" value="1">
     <label for="wontonNoodle">Wonton Noodle</label>&nbsp;&nbsp;&nbsp;&nbsp;
     <input type="radio" id="duckRice" name="breakfast" value="2">
-    <label for="duckRice">Duck Rice</label><br>
+    <label for="duckRice">Duck Rice</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="otherFood" name="breakfast" value="3">
+    <label for="otherFood">Others</label>
+    <div class="form-group">
+        <label for="bOtherCalorie">Estimated Calories</label>
+        <input type="float" name ="bOtherCalorie" placeholder="Only if 'Others' is selected">
+    </div>
+    <br>
     <div class="form-group">
         <label for="bServing">Serving portion</label>
         <input type="int" name ="bServing" placeholder="Default = 1">
@@ -66,7 +77,14 @@ Women: BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) – (4.33
     <input type="radio" id="wontonNoodle" name="lunch" value="1">
     <label for="wontonNoodle">Wonton Noodle</label>&nbsp;&nbsp;&nbsp;&nbsp;
     <input type="radio" id="duckRice" name="lunch" value="2">
-    <label for="duckRice">Duck Rice</label><br>
+    <label for="duckRice">Duck Rice</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="otherFood" name="lunch" value="3">
+    <label for="otherFood">Others</label>
+    <div class="form-group">
+        <label for="lOtherCalorie">Estimated Calories</label>
+        <input type="float" name ="lOtherCalorie" placeholder="Only if 'Others' is selected">
+    </div>
+    <br>
     <div class="form-group">
         <label for="lServing">Serving portion</label>
         <input type="int" name ="lServing" placeholder="Default = 1">
@@ -78,7 +96,14 @@ Women: BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) – (4.33
     <input type="radio" id="wontonNoodle" name="dinner" value="1">
     <label for="wontonNoodle">Wonton Noodle</label>&nbsp;&nbsp;&nbsp;&nbsp;
     <input type="radio" id="duckRice" name="dinner" value="2">
-    <label for="duckRice">Duck Rice</label><br>
+    <label for="duckRice">Duck Rice</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" id="otherFood" name="dinner" value="3">
+    <label for="otherFood">Others</label>
+    <div class="form-group">
+        <label for="dOtherCalorie">Estimated Calories</label>
+        <input type="float" name ="dOtherCalorie" placeholder="Only if 'Others' is selected">
+    </div>
+    <br>
     <div class="form-group">
         <label for="dServing">Serving portion</label>
         <input type="int" name ="dServing" placeholder="Default = 1">
@@ -86,7 +111,8 @@ Women: BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) – (4.33
     <button type="submit" class="btn btn-outline-primary">Calculate</button><br>
 </form> 
 {%if calNeed !=0 or totalIntake!=0%}<!--Display if user got put smth-->
-<h5 align = "center" style ="color:rgb(127, 127, 218)">Calculation Results</h5>
+
+<h4 align = "center" style ="color:rgb(53, 53, 172)">Calculation Results</h4>
 {%endif%}
 <p align = "center">
 {%if calNeed!=0%}<!--Display if user got input the weight, height and age-->
