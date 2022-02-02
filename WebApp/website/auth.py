@@ -250,21 +250,15 @@ def calories():
 @auth.route('/health-trend',methods = ['GET','POST'])
 @login_required
 def health_trend():
-    #data = CalsBMI.query.order_by(CalsBMI.CalsBMIdate).all()
-    #commented data are for testing
-    #dateList = []
-    #caloriesList = []
-    #bmiList = []
-    #dateList = ['12 Jan','13 Jan','14 Jan','15 Jan','16 Jan','17 Jan','18 Jan']
-    #caloriesList = [2100,2200,2300,2400,2300,2200,2000]
-    #bmiList = [21,21.5,22,22,20,21,20]
-    #for i in data:#append data into list for visualisation
-    #    dateList.append(i.CalsBMIdate)
-    #    caloriesList.append(i.calories)
-    #    bmiList.append(i.bmi)
+    dateList,caloriesList, bmiList,isEmpty = chooseData()
 
-    dateList,caloriesList, bmiList = chooseData()
-    
+
+    if isEmpty == True:#if there is no data or too little data
+        addWord = " (Example)"
+        flash('The Dashboard shown is an example due to the lack of data you currently have')
+    else:
+        addWord = ""
+
     #create plot
     fig = plt.figure(figsize=(10,8),constrained_layout=True)
     gs = GridSpec(nrows=2,ncols=2,figure = fig)
@@ -279,87 +273,42 @@ def health_trend():
 
     ax2 = fig.add_subplot(gs[1,:])
     ax2.plot(dateList, caloriesList, 'r-+', label='Calories Intake')
-    ax2.set_title('Calories Intake', fontsize=15)
+    #ax2.set_title('Calories Intake', fontsize=15)
     ax2.set_xlabel('Date')
     ax2.set_ylabel('Calories Intake')
     ax2.set_ylim(bottom=0,top = round(max(caloriesList)+1000))
     #ax2.legend(loc='lower right')
     
-    fig.suptitle("Dashboard for health trends",fontsize = 25)
+    fig.suptitle(f"Dashboard for health trends{addWord}",fontsize = 25)
 
     #fig.savefig('website/static/health_trend.png',dpi=300)
     plt.show()
 
     return render_template("health_trend.html",user = current_user)
 
-def chooseData(): #function to see which data to use for the health trend
-    data = CalsBMI.query.order_by(CalsBMI.CalsBMIdate).all()
+def chooseData(): #function get data from the database to use for visualisation
     dateList = []
     caloriesList = []
     bmiList = []
-    for i in data:#append date into list first
-        dateList.append(i.CalsBMIdate)
+    isEmpty = False #condition to check if there is data recorded, set to false as default
+    try:
+        user = current_user
+        data = user.CalsBMI.query.order_by(CalsBMI.CalsBMIdate).all()
+        for i in data:#append date into list first
+            dateList.append(i.CalsBMIdate)
+            caloriesList.append(i.calories)
+            bmiList.append(i.bmi)
+    except:
+        ""#the records does not exist
+        
+    if len(dateList)< 3:#if the length is less than 3
+        isEmpty = True #the user does not have data recorded
+        dateList = ['2021-2-1', '2021-3-1', '2021-4-1', '2021-5-1', '2021-6-1', '2021-7-1', 
+        '2021-8-1', '2021-9-1', '2021-10-1', '2021-11-1', '2021-12-1', '2022-1-1', ]
+        caloriesList=[1700,1800,1850,1900,2000,1940,1800,1860,1990,2000,2100,1900]
+        bmiList=[19, 19.3, 19.5, 20, 21, 20.5, 19.1, 19.6, 20.1, 21.3,21.8,19.8]
 
-    yearList = []
-    monthList = []
-
-    dList = []
-
-    for i in dateList:
-        if i.year not in yearList: #check to number of years
-            yearList.append(i.year)
-    yearList = yearList.sort()
-    ############# Error with the yearList in none type #####################################
-    if yearList is None:
-        dList = ['12 Jan','13 Jan','14 Jan','15 Jan','16 Jan','17 Jan','18 Jan']
-        caloriesList = [2100,2200,2300,2400,2300,2200,2000]
-        bmiList = [21,21.5,22,22,20,21,20]
-        return dList,caloriesList,bmiList
-    ########################################################################################
-    
-    if len(yearList)<2:  #if the lenght of the years in records are lower than 2, check number of months
-        for i in dateList:
-            if i.month not in monthList:
-                monthList.append(i.month)
-        monthList = monthList.sort()
-        if len(monthList)<12: #if the number of months is lower than 12, use the specific dates
-            newDateList = dateList[-12:]#get the last 12 dates
-            for i in data:
-                for j in newDateList:
-                    if j == i.CalsBMIdate:
-                        caloriesList.append(i.calories)
-                        bmiList.append(i.bmi)
-                        dList.append(j)
-            dList = dList.sort()
-            caloriesList = caloriesList.sort()
-            bmiList = bmiList.sort()
-        else:#if the number of months recorded is more than 12
-            newDateList = dateList
-            mList = []
-            for i in reversed(data):#use reversed data as we want to use the newest data
-                for j in reversed(newDateList):
-                    if j == i.CalsBMIdate and (j.month not in mList):
-                        caloriesList.append(i.calories)
-                        bmiList.append(i.bmi)
-                        mList.append(j.month) #to check if repetitive
-                        dList.append(j) #to get the specific dates
-            dList = dList.sort()
-            caloriesList = caloriesList.sort()
-            bmiList = bmiList.sort()
-    else: #if there are more than 2 years
-        newDateList = dateList
-        yList = []
-        for i in reversed(data):
-            for j in reversed(newDateList):
-                if j == i.CalsBMIdate and (j.year not in yList):
-                    caloriesList.append(i.calories)
-                    bmiList.append(i.bmi)
-                    yList.append(j.year) #to check if repetitive
-                    dList.append(j) #to get the specific dates
-        dList = dList.sort()
-        caloriesList = caloriesList.sort()
-        bmiList = bmiList.sort()
-    return dList,caloriesList,bmiList
+    return dateList,caloriesList,bmiList,isEmpty
 
 
 #Check User Password if correct Function
