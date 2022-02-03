@@ -1,8 +1,9 @@
 from dataclasses import field
+from datetime import datetime
 from tokenize import String
 from .website import create_app
 from .website import db
-from .website.models import Note,User,Patient,User,Disability
+from .website.models import Note,User,Patient,User,Disability,Fall
 from .website import create_app
 from .website import db
 from .website.models import Note,User
@@ -60,6 +61,33 @@ class Diary(Resource):
             return note,201
          
 api.add_resource(Diary,"/api/<int:note_id>")
+
+#Fall Logging
+fall_args = reqparse.RequestParser()
+fall_args.add_argument("date",type=datetime,help="Content of the Fall",required=True)
+fall_args.add_argument("user_id",type=int,help="User id",required=True)
+
+fall_resource_fields = {
+    'id':fields.Integer,
+    'user_id':fields.Integer,
+    'date':fields.DateTime
+}
+class Fall(Resource):
+    
+    
+    @marshal_with(fall_resource_fields)
+    ###### Add Note
+    def post(self,fall_id):
+        args = fall_args.parse_args()
+        new_id = db.session.query(func.max(Fall.id)).scalar()
+        fall_id= new_id + 1
+        fall =  Fall(id=fall_id,date=args['date'],user_id=args['user_id'])
+        fall.add_data()
+        db.session.add(fall)   
+        db.session.commit()
+        return fall,201
+         
+api.add_resource(Fall,"/api/fall")
 
 #User API
 
@@ -187,7 +215,7 @@ def hello():
             sender =dEmail,
             recipients = [patient.email]
             )
-    msg.body = f" Patient Fell on {data.get('data')}"
+    msg.body = f" Patient {patient.fullname} Fell on {data.get('data')}"
     mail.send(msg)
     
     return jsonify(data) #"Sent",201

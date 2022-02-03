@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Sequence
 
 from sqlalchemy import PrimaryKeyConstraint
@@ -32,6 +33,7 @@ class User(db.Model,UserMixin):
     email = db.Column(db.String(150),unique=True)
     password = db.Column(db.String(150))
     notes = db.relationship('Note')
+    falls = db.relationship('Fall')
     type = db.Column('type',db.String(50))
     CalsBMIs = db.relationship('CalsBMI')
     __mapper_args__ = {'polymorphic_on':type}
@@ -105,7 +107,17 @@ class CalsBMI(db.Model):
     bmi = db.Column(db.Float(4))
     CalsBMIdate = db.Column(db.Date())
     CalsBMIid = db.Column(db.Integer,db.ForeignKey('user.id'))
-        
+
+#Class for Fall Data
+
+class Fall(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    data = db.Column(db.String(100000))
+    date = db.Column(db.DateTime(timezone=True),default=func.now())
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
+    
+    def add_data(self):
+        self.data = f"Fell down on {date}"
     
 
 
