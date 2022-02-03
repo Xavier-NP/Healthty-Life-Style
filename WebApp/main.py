@@ -12,6 +12,7 @@ from flask_mail import Mail,Message
 import hashlib
 from flask_login import login_user, login_required, logout_user, current_user
 from flask import Blueprint,request,jsonify
+import json
 
 #!!!!!!!!!!! Before Deploying,change to .website !!!!!!!!!!! 
 app = create_app()
@@ -178,17 +179,17 @@ email = Blueprint('email',__name__)
 @email.route('/mail',methods=['GET','POST'])
 def hello():
     #Get User's Doctor Email
-    # patient = Patient.query.filter_by(patient_id =current_user.id).first()
-    # dEmail = patient.dEmail()
-    # msg = Message(
-    #         'Fall Alert!',
-    #         sender =dEmail,
-    #         recipients = [current_user.email]
-    #         )
-    # msg.body = 'Danny is Gay'
-    # mail.send(msg)
-    data = request.get_json()
-    print (jsonify(data))
+    data = json.loads(request.get_json())
+    patient = Patient.query.filter_by(patient_id =data.get('user_id')).first()
+    dEmail = patient.dEmail()
+    msg = Message(
+            'Fall Alert!',
+            sender =dEmail,
+            recipients = [current_user.email]
+            )
+    msg.body = f" Patient Fell on {data.get('data')}"
+    mail.send(msg)
+    
     return jsonify(data) #"Sent",201
 
 app.register_blueprint(email, url_prefix='/')
