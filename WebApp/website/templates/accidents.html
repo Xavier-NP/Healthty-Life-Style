@@ -21,6 +21,7 @@
             {% for fall in i.falls %}
                 {{loop.index}} {{i.firstname}}
                 <li class="list-group-item">{{  fall.data  }}</li>
+            {% endfor %}
         {% endfor %}
     {% else %}
     {% endif %}
