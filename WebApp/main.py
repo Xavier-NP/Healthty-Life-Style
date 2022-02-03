@@ -76,9 +76,10 @@ class FallBook(Resource):
     ###### Add Fall
     def post(self):
         args = fall_args.parse_args()
-        new_id = db.session.query(func.max(Fall.id)).scalar()
-        fall_id= new_id + 1
-        fall =  Fall(id=fall_id,date=args['date'],user_id=args['user_id'])
+        # ph = Fall.query.get(fall_id)
+        # new_id = db.session.query(func.max(Fall.id)).scalar()
+        # fall_id= new_id + 1
+        fall =  Fall(date=args['date'],user_id=args['user_id'])
         fall.add_data()
         db.session.add(fall)   
         db.session.commit()
