@@ -6,12 +6,12 @@
 {%block content%}
 <h1 align="center">Accidents</h1>
 <h3 align="center"><u>Times {{ user.fullName()}} fell </u></h3>
-{% set i = 0 %}
+
 <ol class="list-group list-group-flush" id="falls">
     {% for fall in user.falls %}
-    {{i}}
+    {{loop.index}}
     <li class="list-group-item">{{  fall.data  }}</li>
-    {% i += 1%}
+
     {% endfor %}
 </ol>
 {% endblock%}
