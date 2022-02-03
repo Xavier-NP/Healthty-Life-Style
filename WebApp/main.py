@@ -72,7 +72,6 @@ fall_resource_fields = {
     'date':fields.String
 }
 class FallBook(Resource):
-    
     @marshal_with(fall_resource_fields)
     ###### Add Fall
     def post(self):
@@ -85,7 +84,7 @@ class FallBook(Resource):
         db.session.commit()
         return fall,201
          
-api.add_resource(Fall,"/api/fall")
+api.add_resource(FallBook,"/api/fall")
 
 #User API
 
