@@ -176,7 +176,7 @@ app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 
 email = Blueprint('email',__name__)
-@email.route('/mail',methods=['POST'])
+@email.route('/mail',methods=['GET','POST'])
 @login_required
 def hello():
     
