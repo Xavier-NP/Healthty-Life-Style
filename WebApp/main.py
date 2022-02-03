@@ -179,7 +179,7 @@ email = Blueprint('email',__name__)
 @email.route('/mail',methods=['GET','POST'])
 def hello():
     #Get User's Doctor Email
-    data = json.load(request.get_json())
+    data = request.get_json()
     patient = Patient.query.filter_by(patient_id =data.get('user_id')).first()
     dEmail = patient.dEmail()
     msg = Message(
