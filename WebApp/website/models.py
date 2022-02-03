@@ -117,7 +117,7 @@ class Fall(db.Model):
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     
     def add_data(self):
-        self.data = f"Fell down on {date}"
+        self.data = f"Fell down on {self.date}"
     
 
 
