@@ -265,7 +265,7 @@ def health_trend():
     dateList,caloriesList, bmiList,isEmpty = chooseData()
     if isEmpty == True:#if there is no data or too little data
         addWord = " (Example)"
-        flash('You do not have enough data for generation of dashboard, an example of the dashboard will be shown instead')
+        flash('You do not have enough data for generation of dashboard, an example of the dashboard will be shown instead',category='error')
     else:
         addWord = ""
     if request.method == 'POST':#when user click the button
@@ -296,6 +296,12 @@ def health_trend():
         return render_template("health_trend.html",user = current_user)
     else:
         return render_template("health_trend.html",user = current_user)
+
+@auth.route('/accidents',methods=['GET','POST'])
+@login_required
+def accidents():
+    return render_template("accidents.html",user=current_user)
+
 
 def chooseData(): #function get data from the database to use for visualisation
     dateList = []

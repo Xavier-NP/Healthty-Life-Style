@@ -8,6 +8,7 @@ from website import db
 from website.models import Note,User
 from flask_restful import Api,Resource,reqparse,fields,marshal_with
 from sqlalchemy import func
+from flask_mail import Mail
 import hashlib
 
 #!!!!!!!!!!! Before Deploying,change to .website !!!!!!!!!!! 
@@ -159,6 +160,11 @@ class PatientApi(Resource):
         
         
 api.add_resource(PatientApi,"/api/register/<email>")
+
+
+############## Mail Server###################
+mail = Mail(app)
+
 
 
 if __name__ == '__main__':

@@ -1,4 +1,6 @@
 from typing import Sequence
+
+from sqlalchemy import PrimaryKeyConstraint
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
@@ -25,6 +27,7 @@ class Note(db.Model):
     
 #Class User
 class User(db.Model,UserMixin):
+    __tablename__ ="user"
     id = db.Column(db.Integer,primary_key=True)
     email = db.Column(db.String(150),unique=True)
     password = db.Column(db.String(150))
@@ -34,9 +37,32 @@ class User(db.Model,UserMixin):
     __mapper_args__ = {'polymorphic_on':type}
 
 
-    
     def fullName(self):
         return f"{self.first_name} {self.last_name}"
+    
+    @property
+    def is_diabetic(self): #Check if User is Diabetic
+        if self.type != "patient":
+            return False
+        else:
+            #diabetic = ailments.select().where(ailments.c.user_id==self.id)
+            diabetic = db.session.query(ailments).filter(ailments.c.user_id==self.id ,ailments.c.disability_id==1).first()
+            if diabetic:
+                return True
+            else:
+                return False
+            
+    @property
+    def crutched(self): #Check if User is Diabetic
+        if self.type != "patient":
+            return False
+        else:
+            #diabetic = ailments.select().where(ailments.c.user_id==self.id)
+            crutched = db.session.query(ailments).filter(ailments.c.user_id==self.id ,ailments.c.disability_id==2).first()
+            if crutched:
+                return True
+            else:
+                return False
     
 #Class Patient
 class Patient(User):
@@ -57,6 +83,7 @@ class Patient(User):
         doctor=Doctor.query.filter_by(doctor_id=self.doctor_id).first()
         return f"{doctor.full_name}"
     
+    
 #Class Doctor
 class Doctor(User):
     __tablename__="doctor"
@@ -76,8 +103,11 @@ class CalsBMI(db.Model):
     CalsBMIdate = db.Column(db.Date())
     CalsBMIid = db.Column(db.Integer,db.ForeignKey('user.id'))
         
-    
-
+class Falldown(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    data = db.Column(db.String(100000))
+    date = db.Column(db.DateTime(timezone=True),default=func.now())
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     
 
 
