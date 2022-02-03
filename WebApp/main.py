@@ -188,6 +188,7 @@ def hello():
     # msg.body = 'Danny is Gay'
     # mail.send(msg)
     data = request.get_json()
+    print (jsonify(data))
     return jsonify(data) #"Sent",201
 
 app.register_blueprint(email, url_prefix='/')
