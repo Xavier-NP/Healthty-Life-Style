@@ -8,12 +8,16 @@ from website import db
 from website.models import Note,User
 from flask_restful import Api,Resource,reqparse,fields,marshal_with
 from sqlalchemy import func
-from flask_mail import Mail
+from flask_mail import Mail,Message
 import hashlib
+from flask_login import login_user, login_required, logout_user, current_user
+from flask import Blueprint,request
+import json
 
 #!!!!!!!!!!! Before Deploying,change to .website !!!!!!!!!!! 
 app = create_app()
 
+mail = Mail(app)
 
 
 ####################APIs for Mobile APP#############################
@@ -163,7 +167,33 @@ api.add_resource(PatientApi,"/api/register/<email>")
 
 
 ############## Mail Server###################
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'pleasegivemeAforpfd@gmail.com'
+app.config['MAIL_PASSWORD'] = 'pleasegivemeA123'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
+
+email = Blueprint('email',__name__)
+@email.route('/mail',methods=['GET','POST'])
+@login_required
+def hello():
+    if request.method == "POST":
+    #Get User's Doctor Email
+        patient = Patient.query.filter_by(patient_id =current_user.id).first()
+        dEmail = patient.dEmail()
+        msg = Message(
+                'Hello',
+                sender =dEmail,
+                recipients = [current_user.email]
+                )
+        msg.body = 'Danny is Gay'
+        mail.send(msg)
+        return "Sent",201
+    return "Failed",404
+
+app.register_blueprint(email, url_prefix='/')
 
 
 
