@@ -176,22 +176,22 @@ app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 
 email = Blueprint('email',__name__)
-@email.route('/mail',methods=['GET','POST'])
+@email.route('/mail',methods=['POST'])
 @login_required
 def hello():
-    if request.method == "POST":
+    
+    
     #Get User's Doctor Email
-        patient = Patient.query.filter_by(patient_id =current_user.id).first()
-        dEmail = patient.dEmail()
-        msg = Message(
-                'Hello',
-                sender =dEmail,
-                recipients = [current_user.email]
-                )
-        msg.body = 'Danny is Gay'
-        mail.send(msg)
-        return "Sent",201
-    return "Failed",404
+    patient = Patient.query.filter_by(patient_id =current_user.id).first()
+    dEmail = patient.dEmail()
+    msg = Message(
+            'Hello',
+            sender =dEmail,
+            recipients = [current_user.email]
+            )
+    msg.body = 'Danny is Gay'
+    mail.send(msg)
+    return "Sent",201
 
 app.register_blueprint(email, url_prefix='/')
 
