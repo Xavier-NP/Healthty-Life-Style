@@ -255,8 +255,12 @@ def calories():
             db.session.add(new_CalsBMI)
             db.session.commit()
             flash('Your BMI and Calories input has been recorded',category='success')
+    #if there is data input, scroll to the bottom
+    scroll = True
+    if calNeed == 0 and totalIntake == 0:
+        scroll = False
 
-    return render_template("calories.html",calNeed = calNeed, totalIntake = totalIntake,bmi=bmi,user = current_user)
+    return render_template("calories.html",calNeed = calNeed, totalIntake = totalIntake,bmi=bmi,user = current_user,scroll = scroll)
 
 
 @auth.route('/health-trend',methods = ['GET','POST'])

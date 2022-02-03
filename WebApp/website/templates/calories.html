@@ -4,13 +4,24 @@
 <!--https://www.garnethealth.org/news/basal-metabolic-rate-calculator-->
 <!--Men: BMR = 88.362 + (13.397 x weight in kg) + (4.799 x height in cm) – (5.677 x age in years)
 Women: BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) – (4.330 x age in years)-->
+
 {%block content%}
 <h2 align = "center">Calories</h2>
+<!--Code to scroll to bottom of page if user has calculated data-->
+<script>
+    function scrollWin() {
+        window.scrollTo(0,document.body.scrollHeight);
+    }
+</script>
+{%if scroll == True%}
+    <body onLoad="scrollWin();"></body>
+{%endif%}
+
+
 
 <!--Get basic info-->
 <br>
 <h4 align = "center" style ="color:rgb(53, 53, 172)">Calculate Calories Requirement</h4>
-<p>*Scroll to the bottom for calculation results</p>
 <form method="POST">
     <!--weight-->
     <b>Enter Information</b>
@@ -138,8 +149,7 @@ Women: BMR = 447.593 + (9.247 x weight in kg) + (3.098 x height in cm) – (4.33
 
     {%else%}
     <p align = "center">At your current rate calories intake, your BMI will be <b>Maintained</b> over time</p>
-    {%endif%}
-<br><br><br></p>
+    {%endif%}</p>
 {%endif%}
-
+<br><br><br>
 {%endblock%}
