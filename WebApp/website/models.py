@@ -113,11 +113,11 @@ class CalsBMI(db.Model):
 class Fall(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     data = db.Column(db.String(100000))
-    date = db.Column(db.String(100000))
+    when = db.Column(db.String(100000),default=str(func.now()))
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     
     def add_data(self):
-        self.data = f"Fell down on {str(self.date)}"
+        self.data = f"Fell down on {str(self.when)}"
     
 
 
