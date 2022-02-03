@@ -11,8 +11,7 @@ from sqlalchemy import func
 from flask_mail import Mail,Message
 import hashlib
 from flask_login import login_user, login_required, logout_user, current_user
-from flask import Blueprint,request
-import json
+from flask import Blueprint,request,jsonify
 
 #!!!!!!!!!!! Before Deploying,change to .website !!!!!!!!!!! 
 app = create_app()
@@ -178,19 +177,18 @@ mail = Mail(app)
 email = Blueprint('email',__name__)
 @email.route('/mail',methods=['GET','POST'])
 def hello():
-    
-    
     #Get User's Doctor Email
     # patient = Patient.query.filter_by(patient_id =current_user.id).first()
     # dEmail = patient.dEmail()
     # msg = Message(
-    #         'Hello',
+    #         'Fall Alert!',
     #         sender =dEmail,
     #         recipients = [current_user.email]
     #         )
     # msg.body = 'Danny is Gay'
     # mail.send(msg)
-    return "Sent",201
+    data = request.get_json()
+    return jsonify(data) #"Sent",201
 
 app.register_blueprint(email, url_prefix='/')
 
