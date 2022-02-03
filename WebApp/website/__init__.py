@@ -1,9 +1,10 @@
-from flask import Flask, app
+from flask import Flask, app,Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from os import path
 from flask_login import LoginManager
 import hashlib
+
 
 #Assigning Database Module
 db = SQLAlchemy()
@@ -16,12 +17,16 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] =f"sqlite:///{DB_NAME}"  #f"postgresql://nujklfeybzgodl:223d4e00a7baa85133eac464de87c2a80c963f15810b38ad88ce6c03e6855c5e@ec2-54-209-221-231.compute-1.amazonaws.com:5432/d7lqkd171p92s5" #Database Storage LOCAL = sqlite:///{DB_NAME} 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app) #Initializing the Database
-    
    
     
     #Importing Routes
     from .views import views
     from .auth import auth
+    
+    
+    
+
+
     
     #Setting Prefixes
     app.register_blueprint(views, url_prefix='/')
@@ -44,7 +49,6 @@ def create_app():
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
-    
     
     return app
 
@@ -70,7 +74,7 @@ def init_Disabilities(app):
                  
             #Inserting Doctors
             new_doctor = Doctor(
-                email="s10208449@connect.np.edu.sg",
+                email="pleasegivemeAforpfd@gmail.com",
                 password=pw.digest().hex(),
                 full_name= "Xavier Kee",
                 )

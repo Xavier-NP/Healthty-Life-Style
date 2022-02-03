@@ -83,6 +83,9 @@ class Patient(User):
         doctor=Doctor.query.filter_by(doctor_id=self.doctor_id).first()
         return f"{doctor.full_name}"
     
+    def dEmail(self):
+        doctor=Doctor.query.filter_by(doctor_id=self.doctor_id).first()
+        return f"{doctor.email}"
     
 #Class Doctor
 class Doctor(User):

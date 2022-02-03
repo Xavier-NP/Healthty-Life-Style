@@ -4,6 +4,7 @@ from calendar import month
 import re
 from flask import Blueprint,render_template,request,flash,redirect,url_for
 from flask.helpers import send_file
+import flask_restful
 from sqlalchemy import select
 from sqlalchemy.sql.functions import user
 from .models import Disability, Doctor,Patient, User,CalsBMI
@@ -18,6 +19,7 @@ import base64
 import mpld3
 import datetime as dt
 from sqlalchemy import desc
+from flask_mail import Message
 
 
 

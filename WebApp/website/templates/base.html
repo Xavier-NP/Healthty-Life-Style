@@ -39,8 +39,9 @@
 
                             {% if user.is_diabetic %}
                             <a class="{{ 'nav-item nav-link active' if active_page == 'diary' else 'nav-item nav-link' }}" id='diary' href="/diary">Diary</a>
+                            {% endif %}
 
-                            {% elif user.crutched %}
+                            {% if user.crutched %}
                             <a class="{{ 'nav-item nav-link active' if active_page == 'accidents' else 'nav-item nav-link' }}" id='accidents' href="/accidents">Accidents</a>
 
                             {% endif %}
