@@ -74,9 +74,8 @@ fall_resource_fields = {
 }
 class Fall(Resource):
     
-    
     @marshal_with(fall_resource_fields)
-    ###### Add Note
+    ###### Add Fall
     def post(self,fall_id):
         args = fall_args.parse_args()
         new_id = db.session.query(func.max(Fall.id)).scalar()
