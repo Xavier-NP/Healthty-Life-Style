@@ -1,11 +1,11 @@
 from dataclasses import field
 from tokenize import String
-from .website import create_app
-from .website import db
-from .website.models import Note,User,Patient,User,Disability
-from .website import create_app
-from .website import db
-from .website.models import Note,User
+from website import create_app
+from website import db
+from website.models import Note,User,Patient,User,Disability
+from website import create_app
+from website import db
+from website.models import Note,User
 from flask_restful import Api,Resource,reqparse,fields,marshal_with
 from sqlalchemy import func
 import hashlib
@@ -15,6 +15,7 @@ app = create_app()
 
 
 
+####################APIs for Mobile APP#############################
 api = Api(app)
 
 
@@ -30,14 +31,16 @@ diary_resource_fields = {
 }
 class Diary(Resource):
     @marshal_with(diary_resource_fields)
+    #### Find Note
     def get(self,note_id):
         result = Note.query.filter_by(id=note_id).first()
         return result
     
     @marshal_with(diary_resource_fields)
+    ###### Add Note
     def post(self,note_id):
         args = diary_post_args.parse_args()
-        ph = Note.query.get(note_id)
+        ph = Note.query.get(note_id) # Check if note id exists
         if ph:
             new_id = db.session.query(func.max(Note.id)).scalar()
             note_id= new_id + 1
@@ -63,6 +66,7 @@ user_resource_fields = {
 
 class UserApi(Resource):
     @marshal_with(user_resource_fields)
+    #Get User Info based on email
     def get(self,user_email):
         result = User.query.filter_by(email=user_email).first()
         return result
@@ -99,7 +103,7 @@ patient_resource_fields = {
 
 class PatientApi(Resource):
     @marshal_with(patient_resource_fields)
-    def post(self,email):
+    def post(self,email):#To Add User as Patient
         args = patient_post_args.parse_args()
         ph = Patient.query.filter_by(email=email).first()
         if ph:

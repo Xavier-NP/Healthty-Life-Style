@@ -13,7 +13,7 @@ DB_NAME = "database.db"
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'GUMMYKKB'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://nujklfeybzgodl:223d4e00a7baa85133eac464de87c2a80c963f15810b38ad88ce6c03e6855c5e@ec2-54-209-221-231.compute-1.amazonaws.com:5432/d7lqkd171p92s5" #Database Storage LOCAL = sqlite:///{DB_NAME} 
+    app.config['SQLALCHEMY_DATABASE_URI'] =f"sqlite:///{DB_NAME}"  #f"postgresql://nujklfeybzgodl:223d4e00a7baa85133eac464de87c2a80c963f15810b38ad88ce6c03e6855c5e@ec2-54-209-221-231.compute-1.amazonaws.com:5432/d7lqkd171p92s5" #Database Storage LOCAL = sqlite:///{DB_NAME} 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app) #Initializing the Database
     
@@ -70,7 +70,7 @@ def init_Disabilities(app):
                  
             #Inserting Doctors
             new_doctor = Doctor(
-                email="DrXavierKee@gmail.com",
+                email="s10208449@connect.np.edu.sg",
                 password=pw.digest().hex(),
                 full_name= "Xavier Kee",
                 )
@@ -79,7 +79,7 @@ def init_Disabilities(app):
             db.session.commit()
             
             new_doctor = Doctor(
-                email="DrSins@gmail.com",
+                email="s10205561@connect.np.edu.sg",
                 password=pw.digest().hex(),
                 full_name = 'Dr Sins'
                 )
