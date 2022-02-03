@@ -4,22 +4,25 @@
 {%block title%} Accidents {% endblock %}
 <!--Content-->
 {%block content%}
-<h1 align="center">Accidents</h1>
-<h3 align="center"><u>Times {{ user.fullName()}} fell </u></h3>
-
-<ol class="list-group list-group-flush" id="falls">
     {% if  user.type == "patient"%}
+        <h1 align="center">Accidents</h1>
+        <h3 align="center"><u>Times {{ user.fullName()}} fell </u></h3>
+
+        <ol class="list-group list-group-flush" id="falls">
         {% for fall in user.falls %}
-        {{loop.index}}
-        <li class="list-group-item">{{  fall.data  }}</li>
+            {{loop.index}}
+            <li class="list-group-item">{{  fall.data  }}</li>
+        {% endfor %}
     {% elif user.type == "doctor"%}
+        <h1 align="center">Accidents Record</h1>
+        <ol class="list-group list-group-flush" id="falls">
         {% set x = user.patients%}
         {%for i in x%}
             {% for fall in i.falls %}
-            {{loop.index}} {{i.firstname}}
-            <li class="list-group-item">{{  fall.data  }}</li>
+                {{loop.index}} {{i.firstname}}
+                <li class="list-group-item">{{  fall.data  }}</li>
+        {% endfor %}
     {% else %}
     {% endif %}
-        {% endfor %}
 </ol>
 {% endblock%}
