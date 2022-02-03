@@ -64,13 +64,13 @@ api.add_resource(Diary,"/api/<int:note_id>")
 
 #Fall Logging
 fall_args = reqparse.RequestParser()
-fall_args.add_argument("date",type=datetime,help="Content of the Fall",required=True)
+fall_args.add_argument("date",type=str,help="date",required=True)
 fall_args.add_argument("user_id",type=int,help="User id",required=True)
 
 fall_resource_fields = {
     'id':fields.Integer,
     'user_id':fields.Integer,
-    'date':fields.DateTime
+    'date':fields.String
 }
 class Fall(Resource):
     

@@ -113,7 +113,7 @@ class CalsBMI(db.Model):
 class Fall(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     data = db.Column(db.String(100000))
-    date = db.Column(db.DateTime(timezone=True),default=func.now())
+    date = db.Column(db.String(100000))
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     
     def add_data(self):
