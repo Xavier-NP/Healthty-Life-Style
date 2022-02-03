@@ -66,6 +66,11 @@ class User(db.Model,UserMixin):
             else:
                 return False
     
+    @property
+    def patients(self): #Returns patients IDs
+        patients  = Patient.session.query.filter_by(doctor_id=self.id).all()
+        return patients
+    
 #Class Patient
 class Patient(User):
     __tablename__="patient"

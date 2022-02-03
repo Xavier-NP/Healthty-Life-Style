@@ -9,11 +9,11 @@ function deleteNote(noteId){
 }
 
 // Delete Disability Function
-function deleteDis(disId){
-    fetch('/delete-disability',{
+function deleteFall(fallId){
+    fetch('/delete-fall',{
         method: 'POST',
-        body: JSON.stringify({ disId:disId }),
+        body: JSON.stringify({ fallId: fallId }),
     }).then((_res) => {
-        window.location.href = "/disabilities";
+        window.location.href = "/accidents";
     });
 }

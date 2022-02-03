@@ -8,10 +8,18 @@
 <h3 align="center"><u>Times {{ user.fullName()}} fell </u></h3>
 
 <ol class="list-group list-group-flush" id="falls">
-    {% for fall in user.falls %}
-    {{loop.index}}
-    <li class="list-group-item">{{  fall.data  }}</li>
-
-    {% endfor %}
+    {% if  user.type == "patient"%}
+        {% for fall in user.falls %}
+        {{loop.index}}
+        <li class="list-group-item">{{  fall.data  }}</li>
+    {% elif user.type == "doctor"%}
+        {% set x = user.patients%}
+        {%for i in x%}
+            {% for fall in i.falls %}
+            {{loop.index}} {{i.firstname}}
+            <li class="list-group-item">{{  fall.data  }}</li>
+    {% else %}
+    {% endif %}
+        {% endfor %}
 </ol>
 {% endblock%}
