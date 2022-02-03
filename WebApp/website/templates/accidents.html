@@ -1,13 +1,15 @@
 {% extends "base.html" %}
-{% set active_page = 'Accidents' %}
+{% set active_page = 'accidents' %}
 <!--Title-->
 {%block title%} Accidents {% endblock %}
 <!--Content-->
 {%block content%}
 <h1 align="center">Accidents</h1>
 <h3 align="center"><u>Times {{ user.fullName()}} fell </u></h3>
+
 <ul class="list-group list-group-flush" id="falls">
     {% for fall in user.falls %}
     <li class="list-group-item">{{  fall.data  }}</li>
     {% endfor %}
+    
 {% endblock%}
