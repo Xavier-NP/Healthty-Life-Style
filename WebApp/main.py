@@ -185,7 +185,7 @@ def hello():
     msg = Message(
             'Fall Alert!',
             sender =dEmail,
-            recipients = [current_user.email]
+            recipients = [patient.email]
             )
     msg.body = f" Patient Fell on {data.get('data')}"
     mail.send(msg)
