@@ -8,6 +8,6 @@
 <h3 align="center"><u>Times {{ user.fullName()}} fell </u></h3>
 <ul class="list-group list-group-flush" id="falls">
     {% for fall in user.falls %}
-    <li class="list-group-item">{{  note.data  }}</li>
+    <li class="list-group-item">{{  fall.data  }}</li>
     {% endfor %}
 {% endblock%}
