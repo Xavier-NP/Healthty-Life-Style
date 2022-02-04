@@ -12,6 +12,7 @@ from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 import datetime
 import matplotlib.pyplot as plt
+import plotly
 from matplotlib.gridspec import GridSpec
 from io import BytesIO, StringIO
 import base64
@@ -268,38 +269,9 @@ def calories():
 def health_trend():
     dateList,caloriesList, bmiList,isEmpty = chooseData()
     if isEmpty == True:#if there is no data or too little data
-        addWord = " (Example)"
         flash('You do not have enough data for generation of dashboard, an example of the dashboard will be shown instead')
-    else:
-        addWord = ""
-    if request.method == 'POST':#when user click the button
-        #create plot
-        fig = plt.figure(figsize=(10,8),constrained_layout=True)
-        gs = GridSpec(nrows=2,ncols=2,figure = fig)
-        ax1 = fig.add_subplot(gs[0,:])
-        ax1.plot(dateList,bmiList,'b-o',label = 'BMI')
-        
-        ax1.set_xlabel('Date')
-        ax1.set_ylabel('BMI')
-        ax1.set_ylim(bottom = 0, top = round(max(bmiList)+5))
-        #ax1.legend(loc='upper right')
 
-        ax2 = fig.add_subplot(gs[1,:])
-        ax2.plot(dateList, caloriesList, 'r-+', label='Calories Intake')
-        #ax2.set_title('Calories Intake', fontsize=15)
-        ax2.set_xlabel('Date')
-        ax2.set_ylabel('Calories Intake')
-        ax2.set_ylim(bottom=0,top = round(max(caloriesList)+1000))
-        #ax2.legend(loc='lower right')
-        
-        fig.suptitle(f"Dashboard for health trends{addWord}",fontsize = 25)
-
-        #fig.savefig('website/static/health_trend.png',dpi=300)
-        plt.show()
-
-        return render_template("health_trend.html",user = current_user)
-    else:
-        return render_template("health_trend.html",user = current_user)
+    return render_template("health_trend.html",user = current_user, dateList = dateList,caloriesList = caloriesList,bmiList =bmiList)
 
 def chooseData(): #function get data from the database to use for visualisation
     dateList = []
