@@ -38,7 +38,7 @@ class User(db.Model,UserMixin):
     CalsBMIs = db.relationship('CalsBMI')
     __mapper_args__ = {'polymorphic_on':type}
 
-
+    @property
     def fullName(self):
         return f"{self.first_name} {self.last_name}"
     
