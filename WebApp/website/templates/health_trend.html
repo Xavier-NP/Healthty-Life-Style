@@ -4,19 +4,97 @@
 {%block title%} Past Calories and BMI Trends {% endblock %}
 <!--Content-->
 {%block content%}
+
+<h1 align="center">Health Trend</h1>
 <br>
-<!--<h1 align = "center">Past Calories and BMI Trends</h1>
-<img src="website/static/health_trend.png" width="1200" height="500" style="float:center"/>
--->
-<!--<image src="{{url_for('static',filename = 'health_trend.jpg')}}" ></image>-->
-
-<h3 align="center">Health Trend</h3>
+<p align="center">The <b>Health Trend</b> generates a dashboard consisting of your BMI and Calories Intake History
+</p>
 <br><br>
-<p align="center">The <b>Health Trend</b> feature will generate a dashboard consisting of your BMI and Calories Intake History
-<br><br>The Dashboard will generate as a pop up</p>
-<form method="POST" align="center">
-    <button type="submit" class="btn btn-outline-primary" align="center">Generate Dashboard</button>
-</form>
+<style type="text/css">
+    .chartBox{
+        width: 800px;
+        top: 50%;
+        left: 50%;
+    }
+</style>
+<div class="chartBox">
+    <canvas id="bmiChart"></canvas>
+</div>
 
+<div class="chartBox">
+    <canvas id="caloriesChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('bmiChart').getContext('2d')
+    const myChart = new Chart(ctx, {
+        type: 'line',
+    data: {
+        labels: {{dateList | safe}},
+        datasets: [{
+            label: 'BMI',
+            data: {{bmiList | safe}},
+            borderColor: "blue",
+            backgroundColor: "#e755ba",
+            pointBackgroundColor: "#55bae7",
+            pointBorderColor: "#55bae7",
+            pointHoverBackgroundColor: "#55bae7",
+            pointHoverBorderColor: "#55bae7",
+        }]
+    },
+    options:{
+        plugins:{
+            legend:{
+                display: false
+            },
+            title:{
+                display:true,
+                text: 'BMI Dashboard',
+                font: {
+                    size:26
+                }
+            }
+        }
+    }
+});
+</script>
+<br><br>
+
+<script>
+    const ctx1 = document.getElementById('caloriesChart').getContext('2d')
+    const myChart1 = new Chart(ctx1, {
+        type: 'line',
+    data: {
+        labels: {{dateList | safe}},
+        datasets: [{
+            label: 'Calories Intake',
+            data: {{caloriesList | safe}},
+            borderColor: "red",
+            backgroundColor: "#e755ba",
+            pointBackgroundColor: "#55bae7",
+            pointBorderColor: "#55bae7",
+            pointHoverBackgroundColor: "#55bae7",
+            pointHoverBorderColor: "#55bae7",
+        }]
+    },
+    options:{
+        plugins:{
+            legend:{
+                display: false
+            },
+            title:{
+                display:true,
+                text: 'Calories Dashboard',
+                font: {
+                    size:26
+                }
+            }
+        }
+    }
+});
+</script>
+
+<br><br><br>
 
 {% endblock%}
