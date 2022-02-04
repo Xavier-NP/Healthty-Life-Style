@@ -118,8 +118,8 @@ patient_post_args.add_argument("password1",type=str,help="password",required=Tru
 patient_post_args.add_argument("password2",type=str,help="password",required=True)
 patient_post_args.add_argument("doctor_id",type=int,help="doctor_id",required=True)
 #patient_post_args.add_argument("disabilities",type=str,action='append',help="disabilities",required=True)
-patient_post_args.add_argument("disabilities1",type=bool,help="disabilities1",required=True)
-patient_post_args.add_argument("disabilities2",type=bool,help="disabilities2",required=True)
+patient_post_args.add_argument("disabilities1",type=str,help="disabilities1",required=True)
+patient_post_args.add_argument("disabilities2",type=str,help="disabilities2",required=True)
 
 patient_resource_fields = {
     'first_name':fields.String,
@@ -132,8 +132,8 @@ patient_resource_fields = {
     'password2':fields.String,
     'doctor_id':fields.Integer,
     #'disabilities':fields.String,
-    'disabilities1':fields.Boolean,
-    'disabilities2':fields.Boolean
+    'disabilities1':fields.String,
+    'disabilities2':fields.String
 }
 
 class PatientApi(Resource):
@@ -185,9 +185,9 @@ class PatientApi(Resource):
             # for x in range(len(args['disabilities'])):
             #     dist_name=Disability.query.filter_by(disName=args['disabilities'][x]).first()
             #     patient.disabilities.append(dist_name)
-            if args['disabilities1'] == json.dumps(True):
+            if args['disabilities1'] == "true":
                 patient.disabilities.append(Disability.query.filter_by(disName='Diabetes').first())
-            if args['disabilities2'] == json.dumps(True):
+            if args['disabilities2'] == "true":
                 patient.disabilities.append(Disability.query.filter_by(disName='Crutches').first())
                 
                 
