@@ -118,8 +118,8 @@ patient_post_args.add_argument("password1",type=str,help="password",required=Tru
 patient_post_args.add_argument("password2",type=str,help="password",required=True)
 patient_post_args.add_argument("doctor_id",type=int,help="doctor_id",required=True)
 #patient_post_args.add_argument("disabilities",type=str,action='append',help="disabilities",required=True)
-patient_post_args.add_argument("disabilities1",type=bool,help="disabilities",required=True)
-patient_post_args.add_argument("disabilities2",type=bool,help="disabilities",required=True)
+patient_post_args.add_argument("disabilities1",type=bool,help="disabilities1",required=True)
+patient_post_args.add_argument("disabilities2",type=bool,help="disabilities2",required=True)
 
 patient_resource_fields = {
     'first_name':fields.String,
@@ -165,9 +165,9 @@ class PatientApi(Resource):
         elif args['password1'] != args['password2']:
             errormsg = 'Password does not match'
             return errormsg,404
-        elif not args['disabilities']:
-            errormsg = 'Please select a disability!'
-            return errormsg,404
+        # elif (args['disabilities1']==False)&(args['disabilities2']==False):
+        #     errormsg = 'Please select a disability!'
+        #     return errormsg,404
             
         else:
             pw = hashlib.sha256()
@@ -185,9 +185,9 @@ class PatientApi(Resource):
             # for x in range(len(args['disabilities'])):
             #     dist_name=Disability.query.filter_by(disName=args['disabilities'][x]).first()
             #     patient.disabilities.append(dist_name)
-            if args['disability1'] == True:
+            if args['disabilities1'] == json.dumps(True):
                 patient.disabilities.append(Disability.query.filter_by(disName='Diabetes').first())
-            if args['disability2'] == True:
+            if args['disabilities2'] == json.dumps(True):
                 patient.disabilities.append(Disability.query.filter_by(disName='Crutches').first())
                 
                 
