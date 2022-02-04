@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% set active_page = 'accidents' %}
+<!--Title-->
+{%block title%} Accidents {% endblock %}
+<!--Content-->
+{%block content%}
+    {% if  user.type == "patient"%}
+        <h1 align="center">Accidents</h1>
+        <h3 align="center"><u>Times {{ user.fullName }} fell </u></h3>
+
+        <ol class="list-group list-group-flush" id="falls">
+        {% for fall in user.falls %}
+            {{loop.index}}
+            <li class="list-group-item">{{  fall.data  }}</li>
+        {% endfor %}
+    {% elif user.type == "doctor"%}
+        <h1 align="center">Accidents Record</h1>
+        <ol class="list-group list-group-flush" id="falls">
+        {% set x = user.patients%}
+        {%for i in x%}
+            {% for fall in i.falls %}
+                {{i.first_name}}
+                {{loop.index}} 
+                <li class="list-group-item">{{  fall.data  }}</li>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+    {% endif %}
+</ol>
+{% endblock%}

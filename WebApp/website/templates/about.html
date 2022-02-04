@@ -1,19 +1,35 @@
 {% extends "base.html" %}
 {% set active_page = 'about' %}
 <!--Title-->
-{%block title%} About {% endblock %}
+{%block title%} About Us {% endblock %}
 <!--Content-->
 {%block content%}
 <h1 align = "center">About Healthy Life Style</h1>
 <br><br>
-<h2>HLS Diary</h2>
 
-<h2>User Info</h2>
+<h3>HLS Diary</h3>
+<p>A diary for you to keep track of anything, be it your health status or personal matters</p>
+<br>
 
-<h2>BMI</h2>
+<h3>User Info</h3>
+<p>Shows you your personal information such as Basic Information, Disablities and Doctor's name</p>
+<br>
 
-<h2>Calories</h2>
+<h3>BMI</h3>
+<p>Learn more about your health status with BMI, a commonly used health indicator
+    <br>
+    The feature will let you know your BMI status and the potential health issues you face
+</p>
+<br>
 
-<h2>Health Trend</h2>
+<h3>Calories</h3>
+<p>Calculate your calories requirement and actual calories intake for the day<br>
+This feature will also allow you to record the BMI and Actual Calories Intake once a day to our system once you click the Calculate button</p>
 
+<br>
+<h3>Health Trend</h3>
+<p>Using your recorded BMI and calories intake, you can generate a dashboard for to see how your 
+    health changes over time.<br>If you do not have enough data, an example of the dashboard will be shown instead
+</p>
+<br><br><br>
 {% endblock%}

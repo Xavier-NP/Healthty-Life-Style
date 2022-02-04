@@ -4,6 +4,8 @@ from calendar import month
 import re
 from flask import Blueprint,render_template,request,flash,redirect,url_for
 from flask.helpers import send_file
+import flask_restful
+from sqlalchemy import select
 from sqlalchemy.sql.functions import user
 from .models import Disability, Doctor,Patient, User,CalsBMI
 import hashlib
@@ -11,11 +13,14 @@ from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 import datetime
 import matplotlib.pyplot as plt
+import plotly
 from matplotlib.gridspec import GridSpec
 from io import BytesIO, StringIO
 import base64
 import mpld3
 import datetime as dt
+from sqlalchemy import desc
+from flask_mail import Message
 
 
 
@@ -194,19 +199,19 @@ def calories():
 
         #getting calories for the other food bOtherCalorie is for breakfast
         try:
-            otherFood = float(request.form.get('bOtherCalorie'))#try to get the other food
+            otherFoodB = float(request.form.get('bOtherCalorie'))#try to get the other food
         except:
-            otherFood = 0 #if not, assign it to 0
+            otherFoodB = 0 #if not, assign it to 0
         try:
-            otherFood = float(request.form.get('lOtherCalorie'))
+            otherFoodL = float(request.form.get('lOtherCalorie'))
         except:
-            otherFood = 0
+            otherFoodL = 0
         try:
-            otherFood = float(request.form.get('dOtherCalorie'))
+            otherFoodD = float(request.form.get('dOtherCalorie'))
         except:
-            otherFood = 0
+            otherFoodD = 0
 
-        meal = [chickenRice,wontonNoodle,duckRice,otherFood]
+        meal = [chickenRice,wontonNoodle,duckRice,otherFoodB,otherFoodL,otherFoodD]
 
         #Serving size in quantity
         try:
@@ -227,6 +232,7 @@ def calories():
             breakfast = int(request.form.get('breakfast'))
             lunch = int(request.form.get('lunch'))
             dinner = int(request.form.get('dinner'))
+
             totalIntake = ((meal[breakfast]*bServing)+(meal[lunch]*lServing)+(meal[dinner]*dServing))
         except:
             totalIntake=0
@@ -234,57 +240,47 @@ def calories():
         totalIntake=0
     if bmi!=0 and totalIntake!=0:
         dateNow = datetime.datetime.now().date()
-        #dateNow=datetime.date(2021, 11, 14)#place data into the db to test
-        exist = CalsBMI.query.filter_by(CalsBMIdate = dateNow).first()
-        if exist:# if the date already exists
-            flash(f'You can record BMI and Calories input once per day! [{exist.calories} kcals and BMI of {exist.bmi} recorded]',category='error')
+        #dateNow=datetime.date(2022, 1, 1)#place data into the db to test (yyyy, mm, dd)
+        exist = CalsBMI.query.order_by(CalsBMI.CalsBMIdate).filter_by(CalsBMIid = current_user.id).all()
+        recorded = False#set it to false first
+        if len(exist)==0:
+            recorded = False
+        else:
+            try:
+                if exist[-1].CalsBMIdate == dateNow:# if the date already exists
+                    recorded = True
+            except:
+                recorded = False
+        
+        if recorded == True:#user has already recorded today
+            flash(f'You can record BMI and Calories input once per day! [{exist[-1].calories} kcals and BMI of {exist[-1].bmi} recorded]',category='error')
         else:
             new_CalsBMI = CalsBMI(calories = totalIntake, bmi = bmi, CalsBMIdate = dateNow, CalsBMIid = current_user.id)
             db.session.add(new_CalsBMI)
             db.session.commit()
             flash('Your BMI and Calories input has been recorded',category='success')
+    #if there is data input, scroll to the bottom
+    scroll = True
+    if calNeed == 0 and totalIntake == 0:
+        scroll = False
 
-    return render_template("calories.html",calNeed = calNeed, totalIntake = totalIntake,bmi=bmi,user = current_user)
+    return render_template("calories.html",calNeed = calNeed, totalIntake = totalIntake,bmi=bmi,user = current_user,scroll = scroll)
 
 
 @auth.route('/health-trend',methods = ['GET','POST'])
 @login_required
 def health_trend():
     dateList,caloriesList, bmiList,isEmpty = chooseData()
-
-
     if isEmpty == True:#if there is no data or too little data
-        addWord = " (Example)"
-        flash('The Dashboard shown is an example due to the lack of data you currently have')
-    else:
-        addWord = ""
+        flash('You do not have enough data for generation of dashboard, an example of the dashboard will be shown instead',category='error')
 
-    #create plot
-    fig = plt.figure(figsize=(10,8),constrained_layout=True)
-    gs = GridSpec(nrows=2,ncols=2,figure = fig)
-    ax1 = fig.add_subplot(gs[0,:])
-    ax1.plot(dateList,bmiList,'b-o',label = 'BMI')
-    
-    ax1.set_xlabel('Date')
-    ax1.set_ylabel('BMI')
-    ax1.set_ylim(bottom = 0, top = round(max(bmiList)+5))
-    #ax1.legend(loc='upper right')
+    return render_template("health_trend.html",user = current_user, dateList = dateList,caloriesList = caloriesList,bmiList =bmiList)
 
+@auth.route('/accidents',methods=['GET','POST'])
+@login_required
+def accidents():
+    return render_template("accidents.html",user=current_user)
 
-    ax2 = fig.add_subplot(gs[1,:])
-    ax2.plot(dateList, caloriesList, 'r-+', label='Calories Intake')
-    #ax2.set_title('Calories Intake', fontsize=15)
-    ax2.set_xlabel('Date')
-    ax2.set_ylabel('Calories Intake')
-    ax2.set_ylim(bottom=0,top = round(max(caloriesList)+1000))
-    #ax2.legend(loc='lower right')
-    
-    fig.suptitle(f"Dashboard for health trends{addWord}",fontsize = 25)
-
-    #fig.savefig('website/static/health_trend.png',dpi=300)
-    plt.show()
-
-    return render_template("health_trend.html",user = current_user)
 
 def chooseData(): #function get data from the database to use for visualisation
     dateList = []
@@ -292,8 +288,7 @@ def chooseData(): #function get data from the database to use for visualisation
     bmiList = []
     isEmpty = False #condition to check if there is data recorded, set to false as default
     try:
-        user = current_user
-        data = user.CalsBMI.query.order_by(CalsBMI.CalsBMIdate).all()
+        data = CalsBMI.query.order_by(CalsBMI.CalsBMIdate).filter_by(CalsBMIid = current_user.id).all()
         for i in data:#append date into list first
             dateList.append(i.CalsBMIdate)
             caloriesList.append(i.calories)
@@ -301,7 +296,7 @@ def chooseData(): #function get data from the database to use for visualisation
     except:
         ""#the records does not exist
         
-    if len(dateList)< 3:#if the length is less than 3
+    if len(dateList) < 3:#if the length is less than 3
         isEmpty = True #the user does not have data recorded
         dateList = ['2021-2-1', '2021-3-1', '2021-4-1', '2021-5-1', '2021-6-1', '2021-7-1', 
         '2021-8-1', '2021-9-1', '2021-10-1', '2021-11-1', '2021-12-1', '2022-1-1', ]
