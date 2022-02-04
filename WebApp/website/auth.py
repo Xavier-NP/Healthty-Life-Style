@@ -271,7 +271,7 @@ def calories():
 def health_trend():
     dateList,caloriesList, bmiList,isEmpty = chooseData()
     if isEmpty == True:#if there is no data or too little data
-        flash('You do not have enough data for generation of dashboard, an example of the dashboard will be shown instead')
+        flash('You do not have enough data for generation of dashboard, an example of the dashboard will be shown instead',category='error')
 
     return render_template("health_trend.html",user = current_user, dateList = dateList,caloriesList = caloriesList,bmiList =bmiList)
 
