@@ -197,19 +197,19 @@ def calories():
 
         #getting calories for the other food bOtherCalorie is for breakfast
         try:
-            otherFood = float(request.form.get('bOtherCalorie'))#try to get the other food
+            otherFoodB = float(request.form.get('bOtherCalorie'))#try to get the other food
         except:
-            otherFood = 0 #if not, assign it to 0
+            otherFoodB = 0 #if not, assign it to 0
         try:
-            otherFood = float(request.form.get('lOtherCalorie'))
+            otherFoodL = float(request.form.get('lOtherCalorie'))
         except:
-            otherFood = 0
+            otherFoodL = 0
         try:
-            otherFood = float(request.form.get('dOtherCalorie'))
+            otherFoodD = float(request.form.get('dOtherCalorie'))
         except:
-            otherFood = 0
+            otherFoodD = 0
 
-        meal = [chickenRice,wontonNoodle,duckRice,otherFood]
+        meal = [chickenRice,wontonNoodle,duckRice,otherFoodB,otherFoodL,otherFoodD]
 
         #Serving size in quantity
         try:
@@ -230,6 +230,7 @@ def calories():
             breakfast = int(request.form.get('breakfast'))
             lunch = int(request.form.get('lunch'))
             dinner = int(request.form.get('dinner'))
+
             totalIntake = ((meal[breakfast]*bServing)+(meal[lunch]*lServing)+(meal[dinner]*dServing))
         except:
             totalIntake=0
