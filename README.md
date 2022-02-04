@@ -8,3 +8,7 @@
   Fret not, as that is what Healthy Life Style is here to solve! Our web application allows for family members, caregivers and doctors to keep track of registered users who are disadvantaged, along with a multitude of different unique features developed for specific disadvantages, allowing for greater care to be administered through the internet.
 </p>
 > Our Mobile App Repo: https://github.com/TJJ101/Healthy-Lifestyle-Mobile-App
+
+
+##Acknowledgments
+<a href="https://www.youtube.com/channel/UC4JX40jDee_tINbkjycV4Sg">Tech with Tim</a>
