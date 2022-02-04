@@ -10,5 +10,5 @@
 > Our Mobile App Repo: https://github.com/TJJ101/Healthy-Lifestyle-Mobile-App
 
 
-##Acknowledgments
+## Acknowledgments
 <a href="https://www.youtube.com/channel/UC4JX40jDee_tINbkjycV4Sg">Tech with Tim</a>
