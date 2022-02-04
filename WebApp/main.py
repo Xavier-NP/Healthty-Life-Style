@@ -213,7 +213,7 @@ def hello():
             sender =dEmail,
             recipients = [patient.email]
             )
-    msg.body = f" Patient {patient.first_name}{patient.last_name} Fell on {data.get('date')}"
+    msg.body = f" Patient {patient.first_name} {patient.last_name} Fell on {data.get('date')}"
     mail.send(msg)
     
     return jsonify(data) #"Sent",201
