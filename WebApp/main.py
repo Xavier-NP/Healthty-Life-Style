@@ -1,20 +1,26 @@
 from dataclasses import field
+from datetime import datetime
 from tokenize import String
 from .website import create_app
 from .website import db
-from .website.models import Note,User,Patient,User,Disability
+from .website.models import Note,User,Patient,User,Disability,Fall
 from .website import create_app
 from .website import db
-from .website.models import Note,User
 from flask_restful import Api,Resource,reqparse,fields,marshal_with
 from sqlalchemy import func
+from flask_mail import Mail,Message
 import hashlib
+from flask_login import login_user, login_required, logout_user, current_user
+from flask import Blueprint,request,jsonify
+import json
 
 #!!!!!!!!!!! Before Deploying,change to .website !!!!!!!!!!! 
 app = create_app()
 
+mail = Mail(app)
 
 
+####################APIs for Mobile APP#############################
 api = Api(app)
 
 
@@ -30,14 +36,16 @@ diary_resource_fields = {
 }
 class Diary(Resource):
     @marshal_with(diary_resource_fields)
+    #### Find Note
     def get(self,note_id):
         result = Note.query.filter_by(id=note_id).first()
         return result
     
     @marshal_with(diary_resource_fields)
+    ###### Add Note
     def post(self,note_id):
         args = diary_post_args.parse_args()
-        ph = Note.query.get(note_id)
+        ph = Note.query.get(note_id) # Check if note id exists
         if ph:
             new_id = db.session.query(func.max(Note.id)).scalar()
             note_id= new_id + 1
@@ -53,6 +61,32 @@ class Diary(Resource):
          
 api.add_resource(Diary,"/api/<int:note_id>")
 
+#Fall Logging
+fall_args = reqparse.RequestParser()
+fall_args.add_argument("date",type=str,help="date",required=True)
+fall_args.add_argument("user_id",type=int,help="User id",required=True)
+
+fall_resource_fields = {
+    'id':fields.Integer,
+    'user_id':fields.Integer,
+    'date':fields.String
+}
+class FallBook(Resource):
+    @marshal_with(fall_resource_fields)
+    ###### Add Fall
+    def post(self):
+        args = fall_args.parse_args()
+        # ph = Fall.query.get(fall_id)
+        # new_id = db.session.query(func.max(Fall.id)).scalar()
+        # fall_id= new_id + 1
+        fall =  Fall(date=args['date'],user_id=args['user_id'])
+        fall.add_data()
+        db.session.add(fall)   
+        db.session.commit()
+        return fall,201
+         
+api.add_resource(FallBook,"/api/fall")
+
 #User API
 
 user_resource_fields = {
@@ -63,6 +97,7 @@ user_resource_fields = {
 
 class UserApi(Resource):
     @marshal_with(user_resource_fields)
+    #Get User Info based on email
     def get(self,user_email):
         result = User.query.filter_by(email=user_email).first()
         return result
@@ -82,7 +117,9 @@ patient_post_args.add_argument("addr",type=str,help="addr",required=True)
 patient_post_args.add_argument("password1",type=str,help="password",required=True)
 patient_post_args.add_argument("password2",type=str,help="password",required=True)
 patient_post_args.add_argument("doctor_id",type=int,help="doctor_id",required=True)
-patient_post_args.add_argument("disabilities",type=str,action='append',help="disabilities",required=True)
+#patient_post_args.add_argument("disabilities",type=str,action='append',help="disabilities",required=True)
+patient_post_args.add_argument("disabilities1",type=str,help="disabilities1",required=True)
+patient_post_args.add_argument("disabilities2",type=str,help="disabilities2",required=True)
 
 patient_resource_fields = {
     'first_name':fields.String,
@@ -94,12 +131,14 @@ patient_resource_fields = {
     'password1':fields.String,
     'password2':fields.String,
     'doctor_id':fields.Integer,
-    'disabilities':fields.String,
+    #'disabilities':fields.String,
+    'disabilities1':fields.String,
+    'disabilities2':fields.String
 }
 
 class PatientApi(Resource):
     @marshal_with(patient_resource_fields)
-    def post(self,email):
+    def post(self,email):#To Add User as Patient
         args = patient_post_args.parse_args()
         ph = Patient.query.filter_by(email=email).first()
         if ph:
@@ -126,9 +165,9 @@ class PatientApi(Resource):
         elif args['password1'] != args['password2']:
             errormsg = 'Password does not match'
             return errormsg,404
-        elif not args['disabilities']:
-            errormsg = 'Please select a disability!'
-            return errormsg,404
+        # elif (args['disabilities1']==False)&(args['disabilities2']==False):
+        #     errormsg = 'Please select a disability!'
+        #     return errormsg,404
             
         else:
             pw = hashlib.sha256()
@@ -143,9 +182,14 @@ class PatientApi(Resource):
                               doctor_id=args['doctor_id'],
                               
                               )
-            for x in range(len(args['disabilities'])):
-                dist_name=Disability.query.filter_by(disName=args['disabilities'][x]).first()
-                patient.disabilities.append(dist_name)
+            # for x in range(len(args['disabilities'])):
+            #     dist_name=Disability.query.filter_by(disName=args['disabilities'][x]).first()
+            #     patient.disabilities.append(dist_name)
+            if args['disabilities1'] == "true":
+                patient.disabilities.append(Disability.query.filter_by(disName='Diabetes').first())
+            if args['disabilities2'] == "true":
+                patient.disabilities.append(Disability.query.filter_by(disName='Crutches').first())
+                
                 
             db.session.add(patient)   
             db.session.commit()
@@ -155,6 +199,36 @@ class PatientApi(Resource):
         
         
 api.add_resource(PatientApi,"/api/register/<email>")
+
+
+############## Mail Server###################
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'pleasegivemeAforpfd@gmail.com'
+app.config['MAIL_PASSWORD'] = 'pleasegivemeA123'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+mail = Mail(app)
+
+email = Blueprint('email',__name__)
+@email.route('/mail',methods=['POST'])
+def hello():
+    #Get User's Doctor Email
+    data = request.get_json()
+    patient = Patient.query.filter_by(patient_id =data.get('user_id')).first()
+    dEmail = patient.dEmail()
+    msg = Message(
+            'Fall Alert!',
+            sender =dEmail,
+            recipients = [patient.email]
+            )
+    msg.body = f" Patient {patient.first_name} {patient.last_name} Fell on {data.get('date')}\n Patient Number {patient.mobileNum}"
+    mail.send(msg)
+    
+    return jsonify(data) #"Sent",201
+
+app.register_blueprint(email, url_prefix='/')
+
 
 
 if __name__ == '__main__':

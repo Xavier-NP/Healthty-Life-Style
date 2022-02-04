@@ -4,6 +4,7 @@ from calendar import month
 import re
 from flask import Blueprint,render_template,request,flash,redirect,url_for
 from flask.helpers import send_file
+import flask_restful
 from sqlalchemy import select
 from sqlalchemy.sql.functions import user
 from .models import Disability, Doctor,Patient, User,CalsBMI
@@ -19,6 +20,7 @@ import base64
 import mpld3
 import datetime as dt
 from sqlalchemy import desc
+from flask_mail import Message
 
 
 
@@ -270,9 +272,15 @@ def calories():
 def health_trend():
     dateList,caloriesList, bmiList,isEmpty = chooseData()
     if isEmpty == True:#if there is no data or too little data
-        flash('You do not have enough data for generation of dashboard, an example of the dashboard will be shown instead')
+        flash('You do not have enough data for generation of dashboard, an example of the dashboard will be shown instead',category='error')
 
     return render_template("health_trend.html",user = current_user, dateList = dateList,caloriesList = caloriesList,bmiList =bmiList)
+
+@auth.route('/accidents',methods=['GET','POST'])
+@login_required
+def accidents():
+    return render_template("accidents.html",user=current_user)
+
 
 def chooseData(): #function get data from the database to use for visualisation
     dateList = []
