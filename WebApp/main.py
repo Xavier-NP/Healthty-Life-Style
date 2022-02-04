@@ -117,7 +117,9 @@ patient_post_args.add_argument("addr",type=str,help="addr",required=True)
 patient_post_args.add_argument("password1",type=str,help="password",required=True)
 patient_post_args.add_argument("password2",type=str,help="password",required=True)
 patient_post_args.add_argument("doctor_id",type=int,help="doctor_id",required=True)
-patient_post_args.add_argument("disabilities",type=str,action='append',help="disabilities",required=True)
+#patient_post_args.add_argument("disabilities",type=str,action='append',help="disabilities",required=True)
+patient_post_args.add_argument("disabilities1",type=bool,help="disabilities",required=True)
+patient_post_args.add_argument("disabilities2",type=bool,help="disabilities",required=True)
 
 patient_resource_fields = {
     'first_name':fields.String,
@@ -129,7 +131,9 @@ patient_resource_fields = {
     'password1':fields.String,
     'password2':fields.String,
     'doctor_id':fields.Integer,
-    'disabilities':fields.String,
+    #'disabilities':fields.String,
+    'disabilities1':fields.Boolean,
+    'disabilities2':fields.Boolean
 }
 
 class PatientApi(Resource):
@@ -178,9 +182,14 @@ class PatientApi(Resource):
                               doctor_id=args['doctor_id'],
                               
                               )
-            for x in range(len(args['disabilities'])):
-                dist_name=Disability.query.filter_by(disName=args['disabilities'][x]).first()
-                patient.disabilities.append(dist_name)
+            # for x in range(len(args['disabilities'])):
+            #     dist_name=Disability.query.filter_by(disName=args['disabilities'][x]).first()
+            #     patient.disabilities.append(dist_name)
+            if args['disability1'] == True:
+                patient.disabilities.append(Disability.query.filter_by(disName='Diabetes').first())
+            if args['disability2'] == True:
+                patient.disabilities.append(Disability.query.filter_by(disName='Crutches').first())
+                
                 
             db.session.add(patient)   
             db.session.commit()
