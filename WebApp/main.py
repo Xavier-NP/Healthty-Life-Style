@@ -202,7 +202,7 @@ app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 
 email = Blueprint('email',__name__)
-@email.route('/mail',methods=['GET','POST'])
+@email.route('/mail',methods=['POST'])
 def hello():
     #Get User's Doctor Email
     data = request.get_json()
