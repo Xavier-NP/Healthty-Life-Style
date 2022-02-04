@@ -138,9 +138,9 @@ patient_resource_fields = {
 
 class PatientApi(Resource):
     @marshal_with(patient_resource_fields)
-    def post(self,email):#To Add User as Patient
+    def post(self):#To Add User as Patient
         args = patient_post_args.parse_args()
-        ph = Patient.query.filter_by(email=email).first()
+        ph = Patient.query.filter_by(email=args['email']).first()
         if ph:
             errormsg = "User Exists"
             return errormsg,404
@@ -198,7 +198,7 @@ class PatientApi(Resource):
 
         
         
-api.add_resource(PatientApi,"/api/register/<email>")
+api.add_resource(PatientApi,"/api/register/")
 
 
 ############## Mail Server###################
