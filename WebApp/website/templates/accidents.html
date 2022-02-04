@@ -6,7 +6,7 @@
 {%block content%}
     {% if  user.type == "patient"%}
         <h1 align="center">Accidents</h1>
-        <h3 align="center"><u>Times {{ user.fullName()}} fell </u></h3>
+        <h3 align="center"><u>Times {{ user.fullName }} fell </u></h3>
 
         <ol class="list-group list-group-flush" id="falls">
         {% for fall in user.falls %}
