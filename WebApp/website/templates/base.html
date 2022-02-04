@@ -29,7 +29,7 @@
                 <div class = "nav nav-pills red">
                     <!-- Add new Navigation Bar Items Here-->
                     {% if user.is_authenticated %} <!-- Routes accessible only after login-->
-                    <a class="nav-item nav-link" id='home' href="/home">Home</a>
+                    <a class="{{ 'nav-item nav-link active' if active_page == 'home' else 'nav-item nav-link' }}" id='home' href="/home">Home</a>
                 
                         {% if user.type=="patient" %} 
                         <a class="{{ 'nav-item nav-link active' if active_page == 'userInfo' else 'nav-item nav-link' }}" id='userInfo' href="/user-info">User Info</a>
