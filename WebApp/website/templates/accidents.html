@@ -18,8 +18,9 @@
         <ol class="list-group list-group-flush" id="falls">
         {% set x = user.patients%}
         {%for i in x%}
+            {{i.first_name}}
             {% for fall in i.falls %}
-                {{i.fullname,loop.index}} 
+                {{loop.index}} 
                 <li class="list-group-item">{{  fall.data  }}</li>
             {% endfor %}
         {% endfor %}
