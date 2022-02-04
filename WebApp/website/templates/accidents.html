@@ -19,7 +19,7 @@
         {% set x = user.patients%}
         {%for i in x%}
             {% for fall in i.falls %}
-                {{loop.index}} {{i.firstname}}
+                {{i.firstname,loop.index}} 
                 <li class="list-group-item">{{  fall.data  }}</li>
             {% endfor %}
         {% endfor %}

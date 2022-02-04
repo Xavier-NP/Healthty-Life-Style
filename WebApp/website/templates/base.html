@@ -47,6 +47,7 @@
                             {% endif %}
 
                         {% elif user.type=="doctor" %}
+                        <a class="{{ 'nav-item nav-link active' if active_page == 'accidents' else 'nav-item nav-link' }}" id='accidents' href="/accidents">Accidents</a>
 
 
                         {% endif %}
